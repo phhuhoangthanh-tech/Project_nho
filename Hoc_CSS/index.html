@@ -1,0 +1,1795 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b120e">
+  <meta name="description" content="Học CSS từng bước trong hành trình phù thủy: lý thuyết trực quan, bàn soi từng dòng code, bài tập và dự án mở khóa chương.">
+  <title>Hogwarts Academy — Học CSS như một phù thủy</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23121c16'/%3E%3Cpath d='M32 8 39 24 56 32 39 40 32 56 25 40 8 32 25 24Z' fill='%23c7ab6b'/%3E%3Ccircle cx='32' cy='32' r='7' fill='%23394d3e'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #09100c;
+      --bg-soft: #0e1712;
+      --panel: #121e17;
+      --panel-raised: #18271e;
+      --panel-soft: #1c2c22;
+      --line: rgba(198, 171, 108, 0.18);
+      --line-strong: rgba(198, 171, 108, 0.38);
+      --gold: #c7ab6b;
+      --gold-light: #ead9ad;
+      --gold-dark: #80683d;
+      --moss: #6e9476;
+      --moss-light: #a8c4a9;
+      --burgundy: #713344;
+      --text: #eee8da;
+      --muted: #a59e8c;
+      --faint: #6f746a;
+      --danger: #d59191;
+      --success: #a8cda9;
+      --display: 'Cinzel', Georgia, serif;
+      --serif: 'EB Garamond', Georgia, serif;
+      --body: 'Source Sans 3', system-ui, sans-serif;
+      --mono: 'JetBrains Mono', Consolas, monospace;
+      --radius-sm: 8px;
+      --radius: 14px;
+      --radius-lg: 22px;
+      --shadow: 0 20px 70px rgba(0, 0, 0, 0.38);
+      --topbar-height: 78px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 50% -10%, rgba(63, 93, 67, 0.2), transparent 42%),
+        radial-gradient(circle at 100% 40%, rgba(79, 38, 47, 0.11), transparent 38%),
+        var(--bg);
+      color: var(--text);
+      font-family: var(--body);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.035;
+      z-index: 100;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");
+    }
+    button, input, textarea, select { font: inherit; }
+    button { color: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    button { cursor: pointer; }
+    button:disabled { cursor: not-allowed; }
+    a { color: inherit; }
+    img { max-width: 100%; }
+    code { font-family: var(--mono); }
+    ::selection { background: rgba(199, 171, 107, 0.3); color: #fff; }
+    :focus-visible { outline: 2px solid var(--gold-light); outline-offset: 4px; }
+    [hidden] { display: none !important; }
+    .icon { width: 19px; height: 19px; flex: 0 0 auto; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
+    .topbar {
+      height: var(--topbar-height);
+      position: sticky;
+      top: 0;
+      z-index: 80;
+      background: rgba(9, 16, 12, 0.93);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(18px);
+    }
+    .topbar-inner {
+      width: min(1460px, 100%);
+      height: 100%;
+      margin: 0 auto;
+      padding: 0 30px;
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      text-align: left;
+      flex: 0 0 auto;
+    }
+    .brand-crest {
+      width: 43px;
+      height: 43px;
+      display: grid;
+      place-items: center;
+      color: var(--gold-light);
+      border: 1px solid var(--line-strong);
+      border-radius: 12px;
+      background: linear-gradient(145deg, #223329, #101914);
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0.04);
+    }
+    .brand-crest .icon { width: 27px; height: 27px; }
+    .brand-name { display: block; font-family: var(--display); font-size: 1.04rem; font-weight: 700; letter-spacing: 1.4px; line-height: 1.25; }
+    .brand-subtitle { display: block; color: var(--gold); font-family: var(--serif); font-size: 0.79rem; font-style: italic; letter-spacing: 0.7px; }
+    .main-nav { display: flex; align-items: center; justify-content: center; gap: 5px; margin: 0 auto; }
+    .nav-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 15px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--muted);
+      font-size: 0.91rem;
+      font-weight: 600;
+      transition: 160ms ease;
+    }
+    .nav-button:hover { color: var(--text); background: rgba(255, 255, 255, 0.035); }
+    .nav-button.active { color: var(--gold-light); border-color: var(--line-strong); background: var(--panel-raised); }
+    .nav-button .icon { width: 17px; height: 17px; }
+    .header-actions { display: flex; align-items: center; gap: 9px; flex: 0 0 auto; }
+    .xp-pill {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      min-width: 102px;
+      justify-content: center;
+      padding: 8px 13px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--panel);
+      color: var(--gold-light);
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+    .xp-pill .icon { width: 16px; height: 16px; color: var(--gold); }
+    .icon-button, .music-button {
+      height: 39px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--panel);
+      color: var(--muted);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: 160ms ease;
+    }
+    .icon-button { width: 39px; padding: 0; }
+    .music-button { padding: 0 13px; font-size: 0.84rem; font-weight: 600; }
+    .icon-button:hover, .music-button:hover { color: var(--gold-light); border-color: var(--line-strong); }
+    .music-button.playing, .icon-button.active { color: var(--gold-light); border-color: var(--line-strong); background: #203126; }
+    .music-source { display: inline-flex; align-items: center; }
+    .music-source select {
+      width: 154px;
+      height: 39px;
+      padding: 0 28px 0 11px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--panel);
+      color: var(--muted);
+      font: inherit;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .music-source select:hover { color: var(--gold-light); border-color: var(--line-strong); }
+    .music-source option { background: #132019; color: var(--text); }
+    #harry-potter-music { position: fixed; left: -10000px; bottom: 0; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+    .volume-control { display: none; align-items: center; gap: 7px; padding: 0 8px; }
+    .volume-control.visible { display: flex; }
+    .volume-control input { width: 70px; accent-color: var(--gold); }
+
+    main { width: min(1400px, 100%); margin: 0 auto; padding: 40px 30px 90px; }
+    .view { animation: view-in 280ms ease both; }
+    @keyframes view-in { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } }
+    .eyebrow { display: flex; align-items: center; gap: 9px; color: var(--gold); font-family: var(--display); font-size: 0.72rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
+    .eyebrow::before { content: ''; width: 30px; height: 1px; background: var(--gold-dark); }
+    .page-title { margin: 11px 0 9px; font-family: var(--display); font-size: clamp(2rem, 4vw, 3.25rem); font-weight: 600; line-height: 1.16; letter-spacing: -0.7px; }
+    .page-title em { color: var(--gold-light); font-style: normal; }
+    .page-intro { max-width: 720px; margin: 0; color: var(--muted); font-family: var(--serif); font-size: 1.17rem; }
+    .button {
+      min-height: 43px;
+      padding: 10px 18px;
+      border: 1px solid var(--line-strong);
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      background: transparent;
+      color: var(--text);
+      font-size: 0.9rem;
+      font-weight: 700;
+      transition: 160ms ease;
+    }
+    .button:hover:not(:disabled) { transform: translateY(-1px); border-color: var(--gold); }
+    .button-primary { background: linear-gradient(135deg, #d0b77d, #aa8b52); border-color: #d0b77d; color: #17130c; box-shadow: 0 8px 24px rgba(160, 130, 71, 0.14); }
+    .button-primary:hover:not(:disabled) { background: linear-gradient(135deg, #e5d19f, #b99a5d); }
+    .button-ghost { background: var(--panel); border-color: var(--line); color: var(--muted); }
+    .button-small { min-height: 36px; padding: 7px 12px; font-size: 0.82rem; }
+    .button:disabled { opacity: 0.42; }
+    .button .icon { width: 17px; height: 17px; }
+
+    .home-hero {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(300px, 0.55fr);
+      align-items: center;
+      gap: 40px;
+      min-height: 340px;
+      margin-bottom: 60px;
+      padding: clamp(30px, 5vw, 62px);
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background:
+        linear-gradient(90deg, rgba(9, 16, 12, 0.97) 0%, rgba(9, 16, 12, 0.85) 48%, rgba(9, 16, 12, 0.26) 100%),
+        linear-gradient(0deg, rgba(9, 16, 12, 0.45), transparent),
+        url('../assets/hogwarts-roadmap-bg.png') center 48% / cover;
+      box-shadow: var(--shadow);
+    }
+    .home-hero::after { content: ''; position: absolute; inset: 0; pointer-events: none; border-radius: inherit; box-shadow: inset 0 0 90px rgba(0, 0, 0, 0.38); }
+    .home-hero-copy { position: relative; z-index: 1; max-width: 720px; }
+    .home-hero h1 { margin: 13px 0 16px; font-family: var(--display); font-size: clamp(2.5rem, 5vw, 4.6rem); font-weight: 600; line-height: 1.05; letter-spacing: -1.5px; }
+    .home-hero h1 span { color: var(--gold-light); }
+    .home-hero p { max-width: 590px; margin: 0 0 27px; color: #c5beac; font-family: var(--serif); font-size: 1.23rem; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+    .journey-card {
+      position: relative;
+      z-index: 1;
+      justify-self: end;
+      width: min(320px, 100%);
+      padding: 25px;
+      border: 1px solid rgba(234, 217, 173, 0.26);
+      border-radius: 18px;
+      background: rgba(11, 20, 14, 0.78);
+      backdrop-filter: blur(13px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    }
+    .journey-top { display: flex; align-items: center; gap: 18px; }
+    .progress-ring {
+      --progress: 0deg;
+      width: 74px;
+      height: 74px;
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: conic-gradient(var(--gold) var(--progress), rgba(255, 255, 255, 0.08) 0);
+      position: relative;
+    }
+    .progress-ring::before { content: ''; position: absolute; inset: 6px; border-radius: inherit; background: #111c15; }
+    .progress-ring strong { position: relative; font-family: var(--display); font-size: 1rem; color: var(--gold-light); }
+    .journey-label { color: var(--muted); font-size: 0.76rem; text-transform: uppercase; letter-spacing: 1px; }
+    .journey-card h2 { margin: 3px 0 2px; font-family: var(--display); font-size: 1.05rem; }
+    .journey-card p { margin: 0; color: var(--gold); font-family: var(--serif); font-size: 0.95rem; font-style: italic; }
+    .journey-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--line); }
+    .journey-meta span { display: block; color: var(--faint); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.8px; }
+    .journey-meta strong { display: block; margin-top: 2px; color: var(--text); font-size: 0.95rem; }
+
+    .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin-bottom: 23px; }
+    .section-heading h2 { margin: 0; font-family: var(--display); font-size: 1.55rem; font-weight: 600; }
+    .section-heading p { margin: 4px 0 0; color: var(--muted); font-family: var(--serif); font-size: 1rem; }
+    .section-note { color: var(--faint); font-size: 0.82rem; white-space: nowrap; }
+    .chapter-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
+    .chapter-card {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+    }
+    .chapter-card:not(.locked):hover { transform: translateY(-5px); border-color: var(--line-strong); box-shadow: 0 18px 45px rgba(0, 0, 0, 0.28); }
+    .chapter-card.current { border-color: rgba(199, 171, 107, 0.6); box-shadow: 0 0 0 1px rgba(199, 171, 107, 0.12), 0 18px 45px rgba(0, 0, 0, 0.22); }
+    .chapter-art { height: 178px; background-image: url('../assets/hogwarts-chapter-atlas.png'); background-size: 200% 400%; background-repeat: no-repeat; position: relative; }
+    .chapter-art::after { content: ''; position: absolute; inset: 0; background: linear-gradient(0deg, var(--panel), transparent 48%); }
+    .chapter-status {
+      position: absolute;
+      z-index: 2;
+      top: 12px;
+      left: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 9px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 999px;
+      background: rgba(9, 15, 11, 0.76);
+      backdrop-filter: blur(8px);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .chapter-status .icon { width: 13px; height: 13px; }
+    .chapter-status.completed { color: var(--success); }
+    .chapter-status.current { color: var(--gold-light); }
+    .chapter-card.locked .chapter-art { filter: grayscale(0.9) brightness(0.42); }
+    .chapter-card.locked .chapter-art::after { background: linear-gradient(0deg, var(--panel), rgba(9, 15, 11, 0.48)); }
+    .lock-seal { position: absolute; z-index: 3; top: 50%; left: 50%; width: 45px; height: 45px; display: grid; place-items: center; transform: translate(-50%, -50%); border: 1px solid var(--line-strong); border-radius: 50%; background: rgba(9, 15, 11, 0.8); color: var(--gold); }
+    .lock-seal .icon { width: 20px; height: 20px; }
+    .chapter-body { position: relative; z-index: 2; padding: 7px 19px 19px; }
+    .chapter-number { color: var(--gold); font-family: var(--display); font-size: 0.67rem; font-weight: 600; letter-spacing: 1.7px; }
+    .chapter-body h3 { min-height: 54px; margin: 6px 0 4px; font-family: var(--display); font-size: 1.08rem; font-weight: 600; line-height: 1.35; }
+    .chapter-body p { min-height: 44px; margin: 0 0 15px; color: var(--muted); font-family: var(--serif); font-size: 0.95rem; line-height: 1.45; }
+    .chapter-meta { display: flex; align-items: center; gap: 13px; margin-bottom: 16px; color: var(--faint); font-size: 0.75rem; }
+    .chapter-meta span { display: inline-flex; align-items: center; gap: 5px; }
+    .chapter-meta .icon { width: 14px; height: 14px; }
+    .chapter-card .button { width: 100%; }
+    .chapter-card.locked .button { border-color: var(--line); color: var(--faint); background: transparent; }
+
+    .roadmap-heading { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 24px; }
+    .roadmap-summary { display: flex; gap: 24px; padding: 13px 18px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); }
+    .roadmap-summary span { display: block; color: var(--faint); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.8px; }
+    .roadmap-summary strong { display: block; font-family: var(--display); font-size: 1rem; color: var(--gold-light); }
+    .roadmap-frame {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      min-height: 480px;
+      overflow: hidden;
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius-lg);
+      background: #0c160f url('../assets/hogwarts-roadmap-bg.png') center / cover;
+      box-shadow: var(--shadow);
+    }
+    .roadmap-frame::before { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(6, 12, 8, 0.13), rgba(6, 12, 8, 0.08) 55%, rgba(6, 12, 8, 0.56)); }
+    .roadmap-frame::after { content: ''; position: absolute; inset: 0; pointer-events: none; box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.55); }
+    .map-route { position: absolute; z-index: 1; inset: 0; width: 100%; height: 100%; pointer-events: none; filter: drop-shadow(0 0 8px rgba(199, 171, 107, 0.6)); }
+    .map-route .route-base { fill: none; stroke: rgba(7, 13, 9, 0.72); stroke-width: 8; stroke-linecap: round; }
+    .map-route .route-gold { fill: none; stroke: #e1c982; stroke-width: 2.4; stroke-linecap: round; stroke-dasharray: 5 9; opacity: 0.72; }
+    .map-node { position: absolute; z-index: 3; width: 112px; transform: translate(-50%, -50%); padding: 0; border: 0; background: transparent; text-align: center; color: var(--text); }
+    .node-disc {
+      width: 65px;
+      height: 65px;
+      margin: 0 auto;
+      display: grid;
+      place-items: center;
+      position: relative;
+      border: 2px solid var(--gold-dark);
+      border-radius: 50%;
+      background: #101a13;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.55), inset 0 0 20px rgba(199, 171, 107, 0.06);
+      transition: 180ms ease;
+    }
+    .node-disc .icon { width: 27px; height: 27px; color: var(--gold-light); }
+    .map-node:hover .node-disc { transform: scale(1.09); border-color: var(--gold-light); }
+    .map-node.current .node-disc { border-color: var(--gold-light); box-shadow: 0 0 0 6px rgba(199, 171, 107, 0.12), 0 0 30px rgba(199, 171, 107, 0.4); }
+    .map-node.completed .node-disc { border-color: var(--moss-light); background: #18271d; }
+    .map-node.completed .node-disc .icon { color: var(--moss-light); }
+    .map-node.locked .node-disc { border-color: #485148; background: rgba(13, 20, 15, 0.84); filter: grayscale(1); }
+    .map-node.locked .node-disc .icon { color: #757d74; }
+    .node-badge { position: absolute; right: -3px; bottom: -2px; width: 24px; height: 24px; display: grid; place-items: center; border: 2px solid #101a13; border-radius: 50%; background: var(--gold); color: #11150e; font-size: 0.67rem; font-weight: 800; }
+    .node-badge .icon { width: 12px; height: 12px; color: inherit; }
+    .node-here { position: absolute; left: 50%; bottom: calc(100% + 8px); transform: translateX(-50%); padding: 3px 9px; border: 1px solid var(--line-strong); border-radius: 999px; background: #111b14; color: var(--gold-light); font-size: 0.62rem; font-weight: 700; letter-spacing: 1px; white-space: nowrap; }
+    .node-name { display: inline-block; max-width: 125px; margin-top: 8px; padding: 4px 8px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 7px; background: rgba(8, 15, 10, 0.77); backdrop-filter: blur(6px); font-family: var(--display); font-size: 0.68rem; line-height: 1.35; }
+    .roadmap-next { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-top: 18px; padding: 18px 22px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel); }
+    .roadmap-next strong { display: block; font-family: var(--display); font-size: 1rem; }
+    .roadmap-next span { color: var(--muted); font-family: var(--serif); }
+
+    .lesson-breadcrumb { display: flex; align-items: center; justify-content: space-between; gap: 18px; margin-bottom: 22px; }
+    .breadcrumb-left { display: flex; align-items: center; gap: 11px; color: var(--muted); font-size: 0.85rem; }
+    .breadcrumb-left button { padding: 0; border: 0; background: transparent; color: var(--gold); display: inline-flex; align-items: center; gap: 6px; }
+    .breadcrumb-left .icon { width: 15px; height: 15px; }
+    .lesson-nav { display: flex; gap: 9px; }
+    .lesson-layout { display: grid; grid-template-columns: 245px minmax(0, 1fr); gap: 26px; align-items: start; }
+    .lesson-sidebar { position: sticky; top: calc(var(--topbar-height) + 20px); padding: 19px; border: 1px solid var(--line); border-radius: var(--radius); background: rgba(18, 30, 23, 0.8); }
+    .sidebar-title { margin: 0 0 13px; color: var(--gold); font-family: var(--display); font-size: 0.72rem; letter-spacing: 1.3px; text-transform: uppercase; }
+    .sidebar-nav { display: grid; gap: 4px; margin-bottom: 22px; }
+    .sidebar-nav a { padding: 8px 9px; border-radius: 7px; color: var(--muted); text-decoration: none; font-size: 0.81rem; line-height: 1.35; }
+    .sidebar-nav a:hover { color: var(--gold-light); background: rgba(255, 255, 255, 0.035); }
+    .sidebar-progress { padding-top: 17px; border-top: 1px solid var(--line); }
+    .sidebar-progress-label { display: flex; justify-content: space-between; color: var(--muted); font-size: 0.76rem; }
+    .mini-progress { height: 5px; margin: 9px 0 13px; overflow: hidden; border-radius: 999px; background: rgba(255, 255, 255, 0.07); }
+    .mini-progress span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--gold-dark), var(--gold-light)); transition: width 300ms ease; }
+    .sidebar-task { display: flex; align-items: center; gap: 8px; margin-top: 8px; color: var(--faint); font-size: 0.78rem; }
+    .sidebar-task .icon { width: 15px; height: 15px; }
+    .sidebar-task.done { color: var(--success); }
+    .lesson-article { min-width: 0; }
+    .lesson-hero { position: relative; overflow: hidden; min-height: 235px; margin-bottom: 24px; padding: 32px; border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--panel); }
+    .lesson-hero-art { position: absolute; inset: 0 0 0 42%; background-image: url('../assets/hogwarts-chapter-atlas.png'); background-size: 200% 400%; opacity: 0.86; }
+    .lesson-hero-art::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, var(--panel), transparent 75%), linear-gradient(0deg, var(--panel), transparent 45%); }
+    .lesson-hero-copy { position: relative; z-index: 1; max-width: 610px; }
+    .lesson-hero h1 { max-width: 600px; margin: 10px 0 7px; font-family: var(--display); font-size: clamp(2rem, 4vw, 3.1rem); font-weight: 600; line-height: 1.16; }
+    .lesson-hero p { max-width: 510px; margin: 0; color: #d0c6b1; font-family: var(--serif); font-size: 1.08rem; }
+    .lesson-meta-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; color: var(--muted); font-size: 0.78rem; }
+    .lesson-meta-row span { display: inline-flex; align-items: center; gap: 6px; }
+    .lesson-meta-row .icon { width: 15px; height: 15px; color: var(--gold); }
+    .lesson-block { margin-bottom: 24px; padding: clamp(23px, 3.5vw, 38px); scroll-margin-top: calc(var(--topbar-height) + 20px); border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel); }
+    .objectives-block { background: linear-gradient(135deg, rgba(199, 171, 107, 0.075), rgba(18, 30, 23, 0.9)); border-color: var(--line-strong); }
+    .block-kicker { color: var(--gold); font-family: var(--display); font-size: 0.67rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; }
+    .lesson-block h2 { margin: 8px 0 15px; font-family: var(--display); font-size: 1.55rem; font-weight: 600; line-height: 1.3; }
+    .lesson-block h3 { margin: 26px 0 9px; font-family: var(--display); font-size: 1.12rem; font-weight: 600; }
+    .lesson-block p { color: #c6beab; font-family: var(--serif); font-size: 1.08rem; line-height: 1.8; }
+    .lesson-block p strong { color: var(--text); }
+    .lesson-block p code, .lesson-block li code, .lesson-block td code { padding: 2px 5px; border: 1px solid var(--line); border-radius: 4px; background: #0d1711; color: var(--gold-light); font-size: 0.82em; }
+    .objective-list { display: grid; gap: 11px; margin: 0; padding: 0; list-style: none; }
+    .objective-list li { display: flex; align-items: flex-start; gap: 11px; color: #d5cdbb; font-family: var(--serif); font-size: 1.06rem; }
+    .objective-list .icon { width: 18px; height: 18px; margin-top: 4px; color: var(--gold); }
+    .story-line { margin: 0 0 24px; padding: 16px 19px; border-left: 2px solid var(--gold-dark); background: rgba(255, 255, 255, 0.025); color: #d1c8b6; font-family: var(--serif); font-size: 1.12rem; font-style: italic; }
+    .theory-section + .theory-section { margin-top: 34px; padding-top: 28px; border-top: 1px solid var(--line); }
+    .theory-section h2 { font-size: 1.35rem; }
+    .story-block { background: linear-gradient(135deg, rgba(199, 171, 107, 0.06), var(--panel)); }
+    .story-block .story-line { margin-bottom: 0; }
+    .recap-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 20px; }
+    .recap-item { display: flex; align-items: flex-start; gap: 11px; padding: 15px; border: 1px solid var(--line); border-radius: 10px; background: rgba(255, 255, 255, 0.025); color: #d5cdbb; font-family: var(--serif); font-size: 1.02rem; }
+    .recap-number { flex: 0 0 auto; width: 24px; height: 24px; display: grid; place-items: center; border: 1px solid var(--line-strong); border-radius: 50%; color: var(--gold-light); font-family: var(--mono); font-size: 0.7rem; }
+    .pitfall-note { margin-top: 14px; padding: 14px 16px; border-left: 2px solid var(--burgundy); background: rgba(113, 51, 68, 0.12); color: #d8c6c3; font-size: 0.9rem; }
+    .pitfall-note strong { color: #efc7c7; }
+    .theory-details { margin-top: 22px; border-top: 1px solid var(--line); padding-top: 18px; }
+    .theory-details summary { width: fit-content; cursor: pointer; color: var(--gold-light); font-weight: 700; }
+    .theory-details summary:hover { color: #fff1c9; }
+    .theory-details[open] summary { margin-bottom: 18px; }
+    .theory-details .story-line { margin-top: 18px; }
+    .reference-title { display: flex; align-items: center; gap: 8px; margin: 23px 0 10px; color: var(--gold-light); font-size: 0.86rem; font-weight: 700; }
+    .reference-title .icon { width: 17px; height: 17px; }
+    .reference-table { width: 100%; border-collapse: collapse; overflow: hidden; border: 1px solid var(--line); border-radius: 9px; font-size: 0.85rem; }
+    .reference-table th, .reference-table td { padding: 11px 13px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    .reference-table th { background: #17231b; color: var(--gold); font-size: 0.69rem; letter-spacing: 0.7px; text-transform: uppercase; }
+    .reference-table tr:last-child td { border-bottom: 0; }
+    .reference-table td:first-child { width: 28%; color: var(--gold-light); }
+    .reference-table td { color: var(--muted); }
+    .reference-table td code { white-space: nowrap; }
+
+    .inspector-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+    .code-window, .preview-window, .editor-window, .task-preview { min-width: 0; overflow: hidden; border: 1px solid var(--line); border-radius: 11px; background: #0b140e; }
+    .window-bar { min-height: 41px; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 9px 13px; border-bottom: 1px solid var(--line); background: #152119; color: var(--muted); font-size: 0.72rem; }
+    .window-bar strong { color: var(--gold-light); font-family: var(--mono); font-size: 0.7rem; font-weight: 500; }
+    .window-dots { display: flex; gap: 5px; }
+    .window-dots i { width: 7px; height: 7px; border-radius: 50%; background: #53614f; }
+    .window-dots i:first-child { background: #8c5d59; }
+    .window-dots i:nth-child(2) { background: #9a8450; }
+    .window-dots i:nth-child(3) { background: #5f8163; }
+    .code-lines { padding: 12px 0; }
+    .code-line { position: relative; width: 100%; min-height: 36px; display: grid; grid-template-columns: 39px minmax(0, 1fr); align-items: center; padding: 4px 28px 4px 0; border: 0; border-left: 2px solid transparent; background: transparent; text-align: left; color: #b7c8b7; font-family: var(--mono); font-size: 0.76rem; line-height: 1.6; transition: 120ms ease; }
+    .code-line::after { content: ''; position: absolute; right: 11px; width: 6px; height: 6px; border-radius: 50%; background: var(--line-accent); box-shadow: 0 0 12px var(--line-accent); opacity: 0; transform: scale(0.4); transition: 120ms ease; }
+    .code-line:hover, .code-line.active { border-left-color: var(--line-accent); background: color-mix(in srgb, var(--line-accent) 13%, transparent); color: #f4eedf; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--line-accent) 22%, transparent); }
+    .code-line:hover::after, .code-line.active::after { opacity: 1; transform: scale(1); }
+    .line-number { color: #526052; text-align: center; user-select: none; }
+    .code-line.active .line-number { color: var(--line-accent); }
+    .code-line code { white-space: pre; transition: color 120ms ease, text-shadow 120ms ease; }
+    .code-line:hover code, .code-line.active code { color: var(--line-accent); text-shadow: 0 0 14px color-mix(in srgb, var(--line-accent) 35%, transparent); }
+    .token-selector { color: #83c9be; font-weight: 600; }
+    .token-property { color: #e7bd72; }
+    .token-value { color: #b8a7e8; }
+    .token-number, .token-color { color: #efa58d; }
+    .token-function { color: #8fc8ef; }
+    .token-string { color: #a8cda9; }
+    .token-punctuation { color: #77867b; }
+    .token-comment { color: #6f7f72; font-style: italic; }
+    .token-atrule { color: #df96c2; font-weight: 600; }
+    .preview-frame { display: block; width: 100%; height: 286px; border: 0; background: #0d1711; }
+    .line-explanation { min-height: 88px; display: flex; align-items: flex-start; gap: 10px; padding: 14px 16px; border-top: 1px solid var(--line); background: #111c15; color: var(--muted); font-size: 0.83rem; line-height: 1.6; }
+    .line-explanation .icon { width: 17px; height: 17px; margin-top: 2px; color: var(--gold); }
+    .line-explanation strong { color: var(--gold-light); }
+    .inspector-help { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin: 14px 0 0; color: var(--faint); font-size: 0.77rem; }
+    .inspector-help span { display: inline-flex; align-items: center; gap: 7px; }
+    .inspector-help .icon { width: 15px; height: 15px; }
+
+    .task-card { margin-top: 18px; padding: 22px; border: 1px solid var(--line); border-radius: var(--radius); background: #0f1913; }
+    .task-card.completed { border-color: rgba(168, 205, 169, 0.36); }
+    .task-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; margin-bottom: 13px; }
+    .task-heading h3 { margin: 4px 0 5px; font-size: 1.18rem; }
+    .task-heading p { margin: 0; color: var(--muted); font-size: 0.95rem; }
+    .task-xp { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border: 1px solid var(--line-strong); border-radius: 999px; color: var(--gold-light); font-size: 0.76rem; font-weight: 700; }
+    .task-xp .icon { width: 14px; height: 14px; }
+    .requirements { display: flex; flex-wrap: wrap; gap: 7px; margin: 14px 0 18px; padding: 0; list-style: none; }
+    .requirements li { padding: 5px 9px; border: 1px solid var(--line); border-radius: 6px; background: rgba(255, 255, 255, 0.025); color: #b9b29f; font-size: 0.75rem; }
+    .editor-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; }
+    .editor-body { display: grid; grid-template-columns: 37px minmax(0, 1fr); height: 285px; }
+    .editor-gutter { padding: 13px 0; overflow: hidden; border-right: 1px solid var(--line); color: #4f5d50; font-family: var(--mono); font-size: 0.73rem; line-height: 1.7; text-align: center; user-select: none; white-space: pre; }
+    .code-input { width: 100%; height: 100%; resize: none; padding: 13px 12px; border: 0; outline: 0; background: transparent; color: #c1d0bf; caret-color: var(--gold-light); font-family: var(--mono); font-size: 0.75rem; line-height: 1.7; tab-size: 2; white-space: pre; overflow: auto; }
+    .code-input:focus { background: rgba(199, 171, 107, 0.025); }
+    .task-preview .preview-frame { height: 285px; }
+    .editor-line-info { min-height: 42px; padding: 9px 12px; border-top: 1px solid var(--line); color: var(--faint); font-size: 0.74rem; line-height: 1.45; }
+    .task-actions { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 14px; }
+    .task-actions-left { display: flex; gap: 8px; }
+    .task-status { display: inline-flex; align-items: center; gap: 5px; color: var(--faint); font-size: 0.72rem; }
+    .task-status.done { color: var(--success); }
+    .task-status .icon { width: 14px; height: 14px; }
+    .hint-box { margin-top: 14px; padding: 13px 15px; border: 1px solid var(--line-strong); border-radius: 8px; background: rgba(199, 171, 107, 0.07); color: #d4c8ad; font-size: 0.84rem; }
+    .task-feedback { margin-top: 14px; padding: 13px 15px; border: 1px solid var(--line); border-radius: 8px; font-size: 0.85rem; }
+    .task-feedback.success { color: var(--success); border-color: rgba(168, 205, 169, 0.35); background: rgba(76, 125, 81, 0.1); }
+    .task-feedback.error { color: var(--danger); border-color: rgba(213, 145, 145, 0.3); background: rgba(125, 63, 63, 0.1); }
+    .chapter-finish { margin-top: 24px; padding: 26px; border: 1px solid var(--line-strong); border-radius: var(--radius); background: linear-gradient(135deg, rgba(199, 171, 107, 0.1), rgba(54, 91, 63, 0.13)); text-align: center; }
+    .finish-seal { width: 56px; height: 56px; margin: 0 auto 13px; display: grid; place-items: center; border: 1px solid var(--gold); border-radius: 50%; color: var(--gold-light); background: #18251c; }
+    .finish-seal .icon { width: 27px; height: 27px; }
+    .chapter-finish h2 { margin: 0 0 7px; }
+    .chapter-finish p { margin: 0 auto 19px; max-width: 570px; }
+
+    .achievement-summary { display: grid; grid-template-columns: 1.3fr repeat(3, 1fr); gap: 15px; margin: 28px 0; }
+    .summary-card { padding: 20px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel); }
+    .summary-card.featured { background: linear-gradient(135deg, rgba(199, 171, 107, 0.1), var(--panel)); }
+    .summary-card span { display: block; color: var(--faint); font-size: 0.7rem; letter-spacing: 0.9px; text-transform: uppercase; }
+    .summary-card strong { display: block; margin-top: 4px; font-family: var(--display); font-size: 1.25rem; color: var(--gold-light); }
+    .summary-card p { margin: 5px 0 0; color: var(--muted); font-size: 0.82rem; }
+    .achievement-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+    .achievement-card { padding: 22px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel); opacity: 0.55; }
+    .achievement-card.earned { opacity: 1; border-color: var(--line-strong); background: linear-gradient(145deg, rgba(199, 171, 107, 0.08), var(--panel)); }
+    .achievement-icon { width: 47px; height: 47px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 13px; color: var(--faint); background: #0d1610; }
+    .achievement-card.earned .achievement-icon { color: var(--gold-light); border-color: var(--line-strong); }
+    .achievement-icon .icon { width: 24px; height: 24px; }
+    .achievement-card h3 { margin: 14px 0 5px; font-family: var(--display); font-size: 1rem; }
+    .achievement-card p { margin: 0; color: var(--muted); font-size: 0.81rem; }
+    .achievement-state { display: inline-flex; align-items: center; gap: 5px; margin-top: 15px; color: var(--faint); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; }
+    .achievement-card.earned .achievement-state { color: var(--success); }
+    .achievement-state .icon { width: 14px; height: 14px; }
+    .danger-zone { margin-top: 35px; padding-top: 22px; border-top: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .danger-zone p { margin: 0; color: var(--muted); font-size: 0.82rem; }
+    .danger-zone strong { display: block; color: var(--text); font-size: 0.9rem; }
+
+    .footer { width: min(1400px, 100%); margin: 0 auto; padding: 0 30px 32px; color: var(--faint); text-align: center; font-family: var(--serif); font-size: 0.9rem; }
+    .footer-line { height: 1px; margin-bottom: 22px; background: linear-gradient(90deg, transparent, var(--line-strong), transparent); }
+    .toast { position: fixed; z-index: 120; left: 50%; bottom: 25px; width: min(520px, calc(100% - 32px)); display: flex; align-items: flex-start; gap: 11px; padding: 14px 16px; transform: translate(-50%, 20px); border: 1px solid var(--line-strong); border-radius: 12px; background: #17241b; box-shadow: 0 18px 50px rgba(0, 0, 0, 0.5); color: var(--text); font-size: 0.86rem; opacity: 0; pointer-events: none; transition: 200ms ease; }
+    .toast.visible { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+    .toast .icon { width: 18px; height: 18px; margin-top: 2px; color: var(--gold); }
+    .toast button { margin-left: auto; padding: 0; border: 0; background: transparent; color: var(--muted); }
+    dialog { width: min(440px, calc(100% - 32px)); padding: 25px; border: 1px solid var(--line-strong); border-radius: var(--radius); background: var(--panel); color: var(--text); box-shadow: var(--shadow); }
+    dialog::backdrop { background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); }
+    dialog h2 { margin: 0 0 10px; font-family: var(--display); font-size: 1.3rem; }
+    dialog p { margin: 0 0 20px; color: var(--muted); }
+    .dialog-actions { display: flex; justify-content: flex-end; gap: 9px; }
+
+    body.focus-mode .main-nav, body.focus-mode .footer { display: none; }
+    body.focus-mode .topbar-inner { justify-content: space-between; }
+    body.focus-mode .brand { margin-right: auto; }
+    body.focus-mode .lesson-layout { display: block; }
+    body.focus-mode .lesson-sidebar { display: none; }
+    body.focus-mode .lesson-article { max-width: 1040px; margin: 0 auto; }
+    body.focus-mode .lesson-hero-art { opacity: 0.55; }
+    body.focus-mode::before { display: none; }
+    body.focus-mode .node-disc, body.focus-mode .chapter-card { animation: none; }
+    body.focus-mode .lesson-block { background: #101a14; }
+
+    @media (max-width: 1180px) {
+      .topbar-inner { gap: 16px; padding: 0 20px; }
+      .brand-subtitle { display: none; }
+      .brand-name { font-size: 0.9rem; }
+      .main-nav { gap: 0; }
+      .nav-button { padding: 8px 10px; font-size: 0.82rem; }
+      .music-button span { display: none; }
+      .music-button { width: 39px; padding: 0; }
+      .music-source select { width: 132px; font-size: 0.74rem; }
+      .chapter-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .home-hero { grid-template-columns: 1.35fr 0.65fr; gap: 22px; }
+      .achievement-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+    @media (max-width: 960px) {
+      :root { --topbar-height: 116px; }
+      .topbar { height: auto; }
+      .topbar-inner { min-height: var(--topbar-height); flex-wrap: wrap; padding: 12px 20px; gap: 10px; }
+      .brand { margin-right: auto; }
+      .main-nav { order: 3; width: 100%; justify-content: flex-start; overflow-x: auto; }
+      .header-actions { margin-left: auto; }
+      .home-hero { grid-template-columns: 1fr; }
+      .journey-card { justify-self: start; width: 100%; max-width: 520px; }
+      .home-hero { background-position: 62% center; }
+      .roadmap-summary { display: none; }
+      .lesson-layout { display: block; }
+      .lesson-sidebar { display: none; }
+      .inspector-grid, .editor-grid { grid-template-columns: 1fr; }
+      .preview-frame, .task-preview .preview-frame { height: 240px; }
+      .achievement-summary { grid-template-columns: repeat(2, 1fr); }
+      .roadmap-frame { min-height: 420px; }
+    }
+    @media (max-width: 720px) {
+      main { padding: 26px 16px 65px; }
+      .topbar-inner { padding: 10px 14px; }
+      .brand-crest { width: 36px; height: 36px; }
+      .brand-name { font-size: 0.78rem; letter-spacing: 0.8px; }
+      .header-actions { gap: 6px; }
+      .xp-pill { min-width: 76px; padding: 7px 9px; font-size: 0.76rem; }
+      .icon-button, .music-button { width: 35px; height: 35px; }
+      .music-source select { width: 112px; height: 35px; padding-left: 9px; font-size: 0.7rem; }
+      .volume-control { display: none !important; }
+      .nav-button { font-size: 0.77rem; padding: 7px 9px; }
+      .nav-button .icon { width: 15px; height: 15px; }
+      .home-hero { min-height: 0; padding: 28px 23px; margin-bottom: 42px; }
+      .home-hero h1 { font-size: 2.55rem; }
+      .home-hero p { font-size: 1.05rem; }
+      .chapter-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px; }
+      .chapter-art { height: 145px; }
+      .chapter-body { padding: 5px 13px 14px; }
+      .chapter-body h3 { min-height: 48px; font-size: 0.94rem; }
+      .chapter-body p { display: none; }
+      .chapter-meta { gap: 8px; margin-bottom: 12px; font-size: 0.67rem; }
+      .section-heading { align-items: flex-start; }
+      .section-note { display: none; }
+      .roadmap-heading { display: block; }
+      .roadmap-frame { aspect-ratio: auto; height: 610px; min-height: 0; background-position: 49% center; }
+      .map-route { display: none; }
+      .map-node { width: 88px; }
+      .node-disc { width: 54px; height: 54px; }
+      .node-disc .icon { width: 22px; height: 22px; }
+      .node-name { max-width: 100px; font-size: 0.59rem; }
+      .roadmap-next { align-items: flex-start; flex-direction: column; }
+      .lesson-breadcrumb { align-items: flex-start; flex-direction: column; }
+      .lesson-nav { width: 100%; }
+      .lesson-nav .button { flex: 1; }
+      .lesson-hero { min-height: 260px; padding: 25px; }
+      .lesson-hero-art { inset: 35% 0 0 0; opacity: 0.58; }
+      .lesson-hero-art::after { background: linear-gradient(180deg, var(--panel), transparent 80%); }
+      .lesson-block { padding: 22px 17px; }
+      .recap-grid { grid-template-columns: 1fr; }
+      .reference-table th, .reference-table td { padding: 9px; font-size: 0.76rem; }
+      .reference-table td:first-child { width: 34%; }
+      .task-card { padding: 15px; }
+      .task-heading { flex-direction: column; gap: 8px; }
+      .task-actions { align-items: stretch; flex-direction: column; }
+      .task-actions .button { width: 100%; }
+      .task-actions-left { display: grid; grid-template-columns: 1fr 1fr; }
+      .achievement-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+      .achievement-card { padding: 17px; }
+      .achievement-summary { gap: 10px; }
+      .summary-card { padding: 15px; }
+      .summary-card strong { font-size: 1rem; }
+      .danger-zone { align-items: flex-start; flex-direction: column; }
+    }
+    @media (max-width: 560px) {
+      :root { --topbar-height: 156px; }
+      .header-actions { max-width: 180px; flex-wrap: wrap; justify-content: flex-end; }
+      .music-source { order: 4; width: 100%; }
+      .music-source select { width: 100%; }
+    }
+    @media (max-width: 440px) {
+      .brand-name { max-width: 80px; letter-spacing: 0.6px; }
+      .xp-pill .icon { display: none; }
+      .chapter-grid { grid-template-columns: 1fr; }
+      .chapter-art { height: 190px; }
+      .chapter-body h3 { min-height: 0; }
+      .chapter-body p { display: block; min-height: 0; }
+      .chapter-meta { font-size: 0.75rem; }
+      .achievement-summary, .achievement-grid { grid-template-columns: 1fr; }
+      .page-title { font-size: 2.15rem; }
+    }
+    @media (max-width: 380px) {
+      .header-actions { max-width: 170px; }
+      .brand-name { max-width: 70px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="i-crest" viewBox="0 0 24 24"><path d="M12 2 15 8.5 22 12l-7 3.5L12 22l-3-6.5L2 12l7-3.5Z"/><circle cx="12" cy="12" r="2.7"/></symbol>
+      <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1Z"/></symbol>
+      <symbol id="i-map" viewBox="0 0 24 24"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3Z"/><path d="M9 3v15M15 6v15"/></symbol>
+      <symbol id="i-trophy" viewBox="0 0 24 24"><path d="M8 3h8v5a4 4 0 0 1-8 0ZM8 5H4v2a4 4 0 0 0 4 4M16 5h4v2a4 4 0 0 1-4 4M12 12v5M8 21h8M9 17h6v4"/></symbol>
+      <symbol id="i-music" viewBox="0 0 24 24"><path d="M9 18V5l11-2v13M9 8l11-2"/><ellipse cx="6" cy="18" rx="3" ry="2.5"/><ellipse cx="17" cy="16" rx="3" ry="2.5"/></symbol>
+      <symbol id="i-volume" viewBox="0 0 24 24"><path d="M11 5 6 9H3v6h3l5 4ZM15 9a4 4 0 0 1 0 6M18 6a8 8 0 0 1 0 12"/></symbol>
+      <symbol id="i-focus" viewBox="0 0 24 24"><path d="M8 3H3v5M16 3h5v5M21 16v5h-5M8 21H3v-5"/><circle cx="12" cy="12" r="3"/></symbol>
+      <symbol id="i-spark" viewBox="0 0 24 24"><path d="m12 3 2.4 6.6L21 12l-6.6 2.4L12 21l-2.4-6.6L3 12l6.6-2.4ZM19 2v4M17 4h4"/></symbol>
+      <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></symbol>
+      <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="M19 12H5m6-6-6 6 6 6"/></symbol>
+      <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+      <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+      <symbol id="i-book" viewBox="0 0 24 24"><path d="M3 4h6a3 3 0 0 1 3 3v14a3 3 0 0 0-3-3H3ZM21 4h-6a3 3 0 0 0-3 3v14a3 3 0 0 1 3-3h6Z"/></symbol>
+      <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></symbol>
+      <symbol id="i-code" viewBox="0 0 24 24"><path d="m8 6-6 6 6 6M16 6l6 6-6 6M14 3l-4 18"/></symbol>
+      <symbol id="i-reset" viewBox="0 0 24 24"><path d="M3 11a9 9 0 1 1 2.6 7M3 4v7h7"/></symbol>
+      <symbol id="i-hint" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M8.5 15.5a7 7 0 1 1 7 0c-.8.6-1.5 1.4-1.5 2.5h-4c0-1.1-.7-1.9-1.5-2.5Z"/></symbol>
+      <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+      <symbol id="i-wand" viewBox="0 0 24 24"><path d="m4 20 12-12M14 4l1-2M18 6l2-1M16 10l2 1M8 4l1 2M5 8l2 1"/><path d="m12 8 4 4"/></symbol>
+      <symbol id="i-hat" viewBox="0 0 24 24"><path d="M6 15 9 3h6l3 12M3 17c2-3 16-3 18 0-4 4-14 4-18 0Z"/><path d="M9 12h6"/></symbol>
+      <symbol id="i-potion" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3M7 15h10"/><path d="M10 18h.01M14 17h.01"/></symbol>
+      <symbol id="i-cloak" viewBox="0 0 24 24"><path d="M8 4c0-2 8-2 8 0l4 15c-5 3-11 3-16 0ZM8 4c2 3 6 3 8 0M12 7v12"/></symbol>
+      <symbol id="i-feast" viewBox="0 0 24 24"><path d="M3 11h18M5 11a7 7 0 0 1 14 0M12 4V2M4 16h16M6 20h12"/></symbol>
+      <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></symbol>
+      <symbol id="i-snitch" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M8 10C3 4 1 6 3 11c1 2 3 3 5 3M16 10c5-6 7-4 5 1-1 2-3 3-5 3M8 14c-5 6-7 4-5-1 1-2 3-3 5-3M16 14c5 6 7 4 5-1-1-2-3-3-5-3"/></symbol>
+      <symbol id="i-patronus" viewBox="0 0 24 24"><path d="M5 20v-7l3-3V4l3 2 2-4 2 4 3-2v6l3 3v7M8 20v-5M16 20v-5M9 11l3 2 3-2"/></symbol>
+      <symbol id="i-medal" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="m8 14-2 7 6-3 6 3-2-7M12 6v6M9 9h6"/></symbol>
+      <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></symbol>
+    </defs>
+  </svg>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <button class="brand" data-action="view" data-view="home" aria-label="Về trang chủ Hogwarts CSS Academy">
+        <span class="brand-crest"><svg class="icon"><use href="#i-crest"/></svg></span>
+        <span><span class="brand-name">HOGWARTS </span><span class="brand-subtitle">Academia Phép Thuật Giao Diện</span></span>
+      </button>
+      <nav class="main-nav" aria-label="Điều hướng chính">
+        <button class="nav-button active" data-action="view" data-view="home" data-nav="home"><svg class="icon"><use href="#i-home"/></svg>Trang chủ</button>
+        <button class="nav-button" data-action="view" data-view="roadmap" data-nav="roadmap"><svg class="icon"><use href="#i-map"/></svg>Lộ trình học</button>
+        <button class="nav-button" data-action="view" data-view="achievements" data-nav="achievements"><svg class="icon"><use href="#i-trophy"/></svg>Thành tích</button>
+      </nav>
+      <div class="header-actions">
+        <div class="xp-pill" title="Điểm kinh nghiệm tích lũy"><svg class="icon"><use href="#i-spark"/></svg><span id="hud-exp">0 EXP</span></div>
+        <label class="music-source" title="Chọn nhạc nền; cả hai bản đều là tệp cục bộ">
+          <span class="sr-only">Chọn nhạc nền</span>
+          <select id="music-source" aria-label="Chọn nhạc nền">
+            <option value="local">Nhạc phù thủy chill</option>
+            <option value="youtube">Harry Potter · MP4</option>
+          </select>
+        </label>
+        <button class="music-button" id="music-button" data-action="music" aria-pressed="false" aria-label="Phát nhạc phù thủy chill không lời" title="Phát Ways of the Wizard — Geoff Harvey"><svg class="icon"><use href="#i-music"/></svg><span id="music-label">Nhạc</span></button>
+        <div class="volume-control" id="volume-control"><svg class="icon"><use href="#i-volume"/></svg><input id="music-volume" type="range" min="0" max="100" value="28" aria-label="Âm lượng nhạc"></div>
+        <button class="icon-button" id="focus-button" data-action="focus" aria-pressed="false" title="Bật chế độ tập trung"><svg class="icon"><use href="#i-focus"/></svg><span class="sr-only">Chế độ tập trung</span></button>
+      </div>
+    </div>
+  </header>
+
+  <audio id="bg-music" src="../assets/hogwarts-chill.mp3" preload="none" loop aria-hidden="true"></audio>
+  <video id="harry-potter-music" src="../assets/hogwarts-prologue.mp4" preload="none" loop playsinline aria-hidden="true"></video>
+
+  <main id="app">
+    <section class="view" id="view-home" aria-labelledby="home-title">
+      <div class="home-hero">
+        <div class="home-hero-copy">
+          <div class="eyebrow">Hành trình 8 chương · Từ nền tảng đến phép thuật giao diện</div>
+          <h1 id="home-title">Học CSS như<br><span>một phù thủy.</span></h1>
+          <p>Không chỉ đọc lý thuyết. Hãy chạm vào từng dòng code, nhìn kết quả thay đổi, hoàn thành thí nghiệm và mở khóa những vùng đất mới của Hogwarts.</p>
+          <div class="hero-actions">
+            <button class="button button-primary" data-action="continue"><svg class="icon"><use href="#i-wand"/></svg><span id="continue-label">Bắt đầu chương 1</span><svg class="icon"><use href="#i-arrow-right"/></svg></button>
+            <button class="button button-ghost" data-action="view" data-view="roadmap"><svg class="icon"><use href="#i-map"/></svg>Xem bản đồ lộ trình</button>
+          </div>
+        </div>
+        <aside class="journey-card" aria-label="Tiến độ học tập của bạn">
+          <div class="journey-top">
+            <div class="progress-ring" id="home-progress-ring"><strong id="home-progress-percent">0%</strong></div>
+            <div><span class="journey-label">Hành trình của bạn</span><h2 id="home-rank">Học viên mới</h2><p id="home-next-label">Thắp sáng ánh phép đầu tiên</p></div>
+          </div>
+          <div class="journey-meta"><div><span>Đã hoàn thành</span><strong id="home-completed">0 / 8 chương</strong></div><div><span>Bảo bối</span><strong id="home-artifacts">0 / 8</strong></div></div>
+        </aside>
+      </div>
+
+      <div class="section-heading"><div><h2>Bộ sưu tập bùa chú CSS</h2><p>Mỗi chương là một địa điểm, một bí kíp và một dự án thực hành.</p></div><span class="section-note">Hoàn thành bài tập + dự án để mở chương kế tiếp</span></div>
+      <div class="chapter-grid" id="chapter-grid"></div>
+    </section>
+
+    <section class="view" id="view-roadmap" aria-labelledby="roadmap-title" hidden>
+      <div class="roadmap-heading">
+        <div><div class="eyebrow">Bản đồ cá nhân của bạn</div><h1 class="page-title" id="roadmap-title">Lộ trình <em>phép thuật CSS</em></h1><p class="page-intro">Đi từ thư viện ánh sáng đến khu rừng Thần Hộ Mệnh. Mỗi dấu chân chỉ mở khi bạn thật sự hoàn thành chương trước.</p></div>
+        <div class="roadmap-summary"><div><span>Vị trí hiện tại</span><strong id="roadmap-current">Chương 1</strong></div><div><span>Đã khám phá</span><strong id="roadmap-percent">0%</strong></div></div>
+      </div>
+      <div class="roadmap-frame" id="roadmap-frame">
+        <svg class="map-route" viewBox="0 0 1200 675" preserveAspectRatio="none" aria-hidden="true"><path class="route-base" d="M112 490 C175 455 205 430 265 405 S370 405 420 365 S485 305 545 305 S615 370 675 405 S760 405 805 335 S865 220 980 175"/><path class="route-gold" d="M112 490 C175 455 205 430 265 405 S370 405 420 365 S485 305 545 305 S615 370 675 405 S760 405 805 335 S865 220 980 175"/></svg>
+        <div id="map-nodes"></div>
+      </div>
+      <div class="roadmap-next"><div><strong id="roadmap-next-title">Nhiệm vụ tiếp theo: Thắp Sáng CSS</strong><span id="roadmap-next-desc">Hoàn thành bài luyện tập và dự án cuối chương để mở đường tới Chiếc Nón Phân Loại.</span></div><button class="button button-primary" data-action="continue">Tiếp tục hành trình<svg class="icon"><use href="#i-arrow-right"/></svg></button></div>
+    </section>
+
+    <section class="view" id="view-lesson" aria-label="Bài học chi tiết" hidden></section>
+
+    <section class="view" id="view-achievements" aria-labelledby="achievements-title" hidden>
+      <div class="eyebrow">Sổ ghi danh dự Hogwarts</div>
+      <h1 class="page-title" id="achievements-title">Thành tích <em>của bạn</em></h1>
+      <p class="page-intro">Mỗi chương hoàn thành là một bảo bối được khắc tên. EXP chỉ được cộng một lần cho mỗi bài tập và dự án, nên bạn luôn có thể quay lại luyện tập mà không bị cộng điểm trùng.</p>
+      <div class="achievement-summary" id="achievement-summary"></div>
+      <div class="section-heading"><div><h2>Các danh hiệu</h2><p>Khám phá, soi code và hoàn thành dự án để mở khóa.</p></div></div>
+      <div class="achievement-grid" id="achievement-grid"></div>
+      <div class="danger-zone"><div><strong>Bắt đầu lại hành trình</strong><p>Xóa tiến độ, EXP và mã đã lưu trên trình duyệt này.</p></div><button class="button button-ghost button-small" data-action="open-reset"><svg class="icon"><use href="#i-reset"/></svg>Đặt lại tiến độ</button></div>
+    </section>
+  </main>
+
+  <footer class="footer"><div class="footer-line"></div>Draco Dormiens Nunquam Titillandus — Đừng đánh thức con rồng đang ngủ.<br>Hogwarts CSS Academy · Lý thuyết trực quan, thực hành có mục tiêu, không quảng cáo xao nhãng.</footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"><svg class="icon"><use href="#i-spark"/></svg><span id="toast-text"></span><button data-action="close-toast" aria-label="Đóng thông báo"><svg class="icon"><use href="#i-close"/></svg></button></div>
+  <dialog id="reset-dialog"><h2>Bắt đầu hành trình mới?</h2><p>Toàn bộ chương đã mở, EXP, thành tích và code đã viết sẽ bị xóa khỏi trình duyệt này. Thao tác này không thể hoàn tác.</p><div class="dialog-actions"><button class="button button-ghost" data-action="close-reset">Giữ tiến độ</button><button class="button button-primary" data-action="confirm-reset">Xác nhận đặt lại</button></div></dialog>
+
+  <script>
+    'use strict';
+
+    const STORAGE_KEY = 'hogwarts-css-academy-v3';
+    const icon = (name, className = '') => `<svg class="icon ${className}" aria-hidden="true"><use href="#i-${name}"/></svg>`;
+    const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
+    const normalizeCss = (value) => String(value).replace(/\/\*[\s\S]*?\*\//g, '').replace(/\s+/g, '').toLowerCase().replace(/(^|[^\w])\.(\d+)/g, '$10.$2');
+    const hasDeclaration = (css, property, value) => normalizeCss(css).includes(`${property}:${String(value).replace(/\s+/g, '').toLowerCase()}`);
+
+    const defaultState = () => ({ unlocked: 1, xp: 0, tasks: {}, drafts: {}, inspected: [], currentChapter: 1, focus: false, musicSource: 'local' });
+    let state = defaultState();
+    let currentView = 'home';
+    let currentChapterId = 1;
+    let toastTimer = null;
+    let previewTimer = null;
+
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+      if (saved && typeof saved === 'object') {
+        state = {
+          ...defaultState(),
+          ...saved,
+          unlocked: Math.max(1, Math.min(8, Number(saved.unlocked) || 1)),
+          xp: Math.max(0, Number(saved.xp) || 0),
+          tasks: saved.tasks && typeof saved.tasks === 'object' ? saved.tasks : {},
+          drafts: saved.drafts && typeof saved.drafts === 'object' ? saved.drafts : {},
+          inspected: Array.isArray(saved.inspected) ? saved.inspected : [],
+          musicSource: saved.musicSource === 'youtube' ? 'youtube' : 'local'
+        };
+      }
+    } catch (error) {
+      state = defaultState();
+    }
+
+    const chapters = [
+      {
+        id: 1,
+        title: 'Thắp Sáng CSS',
+        artifact: 'Đũa phép Lumos',
+        subtitle: 'Cú pháp, bộ chọn và màu sắc',
+        location: 'Thư Viện Ánh Sáng',
+        icon: 'wand',
+        time: 20,
+        story: 'Trong căn phòng yên tĩnh của thư viện, ánh nến chỉ thức tỉnh khi một câu thần chú được viết đúng. Câu chú CSS đầu tiên của bạn cũng vậy: một bộ chọn nhỏ có thể thay đổi toàn bộ diện mạo một phần tử.',
+        objectives: ['Nhận diện selector, property và value trong một ruleset.', 'Phân biệt thẻ style, thẻ link và thuộc tính style nội tuyến.', 'Dùng màu chữ, màu nền, viền và bo góc để tạo một thẻ phép.', 'Đọc được tác dụng của từng dòng CSS trong kết quả trực tiếp.'],
+        recap: ['Mỗi ruleset gồm <strong>selector</strong> và khối khai báo; mỗi khai báo là <strong>property: value;</strong>.', 'Ưu tiên <code>&lt;link rel="stylesheet"&gt;</code> cho dự án lớn; <code>&lt;style&gt;</code> hợp CSS nội bộ, còn <code>style=""</code> chỉ nên dùng có chủ đích.', 'CSS giải quyết xung đột theo nguồn, độ quan trọng, độ cụ thể và thứ tự xuất hiện; quy tắc sau có thể thắng khi cùng độ ưu tiên.', 'Biết thêm <code>rgb()</code>, <code>hsl()</code>, <code>rem</code>, <code>%</code> và <code>inherit</code> giúp lựa chọn màu, đơn vị và kế thừa linh hoạt hơn.'],
+        pitfall: 'Thiếu dấu <code>;</code> có thể làm trình duyệt bỏ qua khai báo; tên class trong HTML và CSS phải viết giống nhau, kể cả chữ hoa/chữ thường.',
+        theory: [
+          { title: 'Giải phẫu một câu thần chú', html: '<p>Một <strong>ruleset CSS</strong> gồm bộ chọn và khối khai báo. Bộ chọn chọn phần tử HTML; mỗi khai báo gồm <strong>property: value;</strong>. Dấu chấm phẩy ngăn cách các khai báo, còn cặp ngoặc nhọn bao quanh khối.</p><p>Ví dụ <code>.lumos-card { color: #ead9ad; }</code> chọn mọi phần tử có class <code>lumos-card</code>, sau đó đổi màu chữ của chúng.</p>' },
+          { title: 'Ba cách đưa CSS vào HTML', html: '<p>Dùng thẻ <code>&lt;link&gt;</code> để nạp tệp CSS bên ngoài, thẻ <code>&lt;style&gt;</code> cho CSS nằm trong trang, và thuộc tính <code>style</code> cho một quy tắc chỉ áp dụng ngay trên một thẻ. Trong dự án thật, tệp CSS bên ngoài thường dễ bảo trì nhất.</p>' },
+          { title: 'Màu sắc, đơn vị và tính kế thừa', html: '<p>Màu HEX gồm 6 chữ số sau dấu <code>#</code>. Đơn vị <code>px</code> là pixel cố định; <code>rem</code> dựa trên cỡ chữ gốc; <code>%</code> dựa trên không gian chứa. Các thuộc tính như <code>color</code> và <code>font-family</code> thường được phần tử con kế thừa.</p>' }
+        ],
+        tags: [{ tag: '<style>', effect: 'Chứa CSS nội bộ trong tài liệu HTML.' }, { tag: '<link>', effect: 'Liên kết một tệp CSS bên ngoài, thường đặt trong head.' }, { tag: '<div>', effect: 'Tạo một khối vùng chứa; class gắn trên div giúp CSS chọn đúng vùng đó.' }],
+        properties: [{ name: 'color', effect: 'Đổi màu chữ, ví dụ #ead9ad.' }, { name: 'background-color', effect: 'Tô màu nền cho phần tử.' }, { name: 'border', effect: 'Tạo viền theo cú pháp width style color.' }, { name: 'border-radius', effect: 'Bo các góc của khung.' }, { name: 'font-family', effect: 'Chọn họ chữ cho văn bản.' }],
+        inspector: {
+          filename: 'lumos.css',
+          baseCss: '.lumos-card{display:grid;gap:7px;min-width:245px;padding:22px;border:1px solid #485744;border-radius:4px;background:#111b14;text-align:center}.lumos-card strong{font-size:1.3rem}.lumos-card small{font-family:Georgia,serif}',
+          targetHtml: '<div class="lumos-card"><strong>Lumos</strong><small>Ánh sáng đầu tiên của học viên</small></div>',
+          lines: [
+            { code: '.lumos-card {', desc: 'Bộ chọn class chọn tất cả phần tử có class lumos-card.', apply: '' },
+            { code: '  color: #ead9ad;', desc: 'Đổi màu chữ thành vàng kem, làm tiêu đề Lumos sáng lên.', apply: '.lumos-card{color:#ead9ad;}' },
+            { code: '  background-color: #17241c;', desc: 'Tô nền xanh rêu đậm, tạo chiều sâu cho thẻ phép.', apply: '.lumos-card{background-color:#17241c;}' },
+            { code: '  border: 2px solid #c7ab6b;', desc: 'Thêm khung viền dày 2 pixel, nét liền, màu đồng thau.', apply: '.lumos-card{border:2px solid #c7ab6b;}' },
+            { code: '  padding: 18px 24px;', desc: 'Tạo khoảng đệm 18px trên dưới và 24px hai bên bên trong viền.', apply: '.lumos-card{padding:18px 24px;}' },
+            { code: '  border-radius: 12px;', desc: 'Bo bốn góc 12 pixel để thẻ mềm mại hơn.', apply: '.lumos-card{border-radius:12px;}' },
+            { code: '  text-align: center;', desc: 'Căn tiêu đề và mô tả vào giữa thẻ.', apply: '.lumos-card{text-align:center;}' },
+            { code: '}', desc: 'Đóng khối khai báo. Khi thiếu dấu này, trình duyệt có thể bỏ qua quy tắc.', apply: '' }
+          ]
+        },
+        exercise: {
+          title: 'Bài tập 1 · Thắp sáng cây đũa', brief: 'Hoàn thành màu chữ và màu nền của .lumos-wand để ánh sáng xuất hiện.', requirements: ['.lumos-wand', 'color: #ead9ad', 'background-color: #17241c'],
+          starter: '.lumos-wand {\n  color: ____;\n  background-color: #17241c;\n}',
+          hint: 'Thay ____ bằng mã màu #ead9ad. Giữ nguyên dấu chấm phẩy sau mỗi khai báo.',
+          baseCss: '.lumos-wand{display:grid;place-items:center;width:220px;height:130px;border:1px solid #485744;border-radius:8px;font-family:Georgia,serif;font-size:1.4rem}',
+          previewHtml: '<div class="lumos-wand">Lumos</div>', xp: 40,
+          validator: (css) => hasDeclaration(css, 'color', '#ead9ad') && hasDeclaration(css, 'background-color', '#17241c') && normalizeCss(css).includes('.lumos-wand{')
+        },
+        project: {
+          title: 'Dự án 1 · Lời chào từ Hogwarts', brief: 'Tạo một tấm bảng chào hoàn chỉnh với viền đồng, chữ vàng kem, nền rêu và góc bo.', requirements: ['.welcome-sign', 'border: 2px solid #c7ab6b', 'border-radius: 12px', 'text-align: center'],
+          starter: '/* Thêm màu chữ, viền, bo góc và căn giữa */\n.welcome-sign {\n  background-color: #17241c;\n  padding: 20px;\n}',
+          hint: 'Bổ sung color, border, border-radius và text-align vào trong .welcome-sign.',
+          baseCss: '.welcome-sign{width:290px;font-family:Georgia,serif}.welcome-sign strong{display:block;font-size:1.5rem}.welcome-sign span{display:block;margin-top:6px}',
+          previewHtml: '<div class="welcome-sign"><strong>Chào mừng đến Hogwarts</strong><span>Nơi những dòng code thức tỉnh</span></div>', xp: 80,
+          validator: (css) => normalizeCss(css).includes('.welcome-sign{') && hasDeclaration(css, 'color', '#ead9ad') && hasDeclaration(css, 'border', '2px solid #c7ab6b') && hasDeclaration(css, 'border-radius', '12px') && hasDeclaration(css, 'text-align', 'center')
+        }
+      },
+      {
+        id: 2,
+        title: 'Chiếc Nón Phân Loại',
+        artifact: 'Chiếc Nón Phân Loại',
+        subtitle: 'Bộ chọn, quan hệ DOM và tương tác',
+        location: 'Đại Sảnh Phân Loại',
+        icon: 'hat',
+        time: 25,
+        story: 'Chiếc nón không đọc suy nghĩ; nó quan sát từng chi tiết để đưa ra lựa chọn. Bộ chọn CSS cũng vậy: chọn đúng phần tử và đúng quan hệ, hiệu ứng sẽ xuất hiện đúng lúc.',
+        objectives: ['Phân biệt bộ chọn thẻ, class, ID và universal.', 'Dùng bộ chọn con, con trực tiếp, liền kề và huynh đệ.', 'Áp dụng :hover và :focus-visible cho tương tác.', 'Hiểu thứ tự ưu tiên inline, ID, class và thẻ.'],
+        recap: ['Gộp nhiều bộ chọn bằng dấu phẩy; dùng <code>:is()</code>, <code>:where()</code> và <code>:not()</code> để viết bộ chọn gọn mà vẫn rõ mục tiêu.', 'Độ cụ thể có thể ước lượng theo <strong>(ID, class, thẻ)</strong>; <code>:where()</code> có độ cụ thể 0, còn <code>!important</code> chỉ nên là phương sách cuối.', 'Combinator <code>A B</code>, <code>A &gt; B</code>, <code>A + B</code>, <code>A ~ B</code> lần lượt diễn tả con cháu, con trực tiếp, liền kề và cùng cha.', '<code>:hover</code> không đủ cho truy cập: hãy luôn có <code>:focus-visible</code>, <code>:active</code> và trạng thái disabled rõ ràng.'],
+        pitfall: 'Dùng ID để định dạng khiến mã khó tái sử dụng; bỏ trạng thái focus khiến người dùng bàn phím không biết đang đứng ở đâu.',
+        theory: [
+          { title: 'Chọn đúng mục tiêu', html: '<p>Bộ chọn thẻ như <code>button</code> chọn mọi nút. Class như <code>.house-crest</code> có thể dùng lại nhiều lần. ID như <code>#main-title</code> chỉ nên dùng cho một phần tử duy nhất. Dấu <code>*</code> chọn mọi phần tử.</p>' },
+          { title: 'Quan hệ giữa các phần tử', html: '<p><code>.hall p</code> chọn mọi đoạn văn nằm sâu trong hall. <code>.hall &gt; p</code> chỉ chọn con trực tiếp. <code>h2 + p</code> chọn đoạn ngay sau h2, còn <code>h2 ~ p</code> chọn mọi đoạn cùng cha đứng sau h2.</p>' },
+          { title: 'Pseudo-class và độ ưu tiên', html: '<p><code>:hover</code> kích hoạt khi con trỏ ở trên phần tử; <code>:focus-visible</code> giúp người dùng bàn phím nhìn thấy tiêu điểm. Khi quy tắc xung đột, inline thắng ID, ID thắng class và pseudo-class, class thắng bộ chọn thẻ.</p>' }
+        ],
+        tags: [{ tag: '<button>', effect: 'Tạo nút có thể nhận tương tác chuột và bàn phím.' }, { tag: '<section>', effect: 'Nhóm nội dung có cùng chủ đề; thuộc tính class giúp định vị nhóm.' }, { tag: '<span>', effect: 'Nhóm một đoạn nội dung ngắn trong dòng.' }],
+        properties: [{ name: ':hover', effect: 'Áp dụng phong cách khi con trỏ nằm trên phần tử.' }, { name: ':focus-visible', effect: 'Hiển thị trạng thái tiêu điểm cho thao tác bàn phím.' }, { name: 'transition', effect: 'Tạo chuyển tiếp mượt giữa hai trạng thái.' }, { name: 'transform', effect: 'Phóng to, xoay hoặc dịch chuyển phần tử.' }],
+        inspector: {
+          filename: 'sorting-hat.css',
+          baseCss: '.house-crest{display:grid;place-items:center;min-width:245px;padding:22px;border:2px solid #4d5141;border-radius:12px;background:#151c16;transition:transform .3s ease,background-color .3s ease,border-color .3s ease}.house-crest strong{margin-top:8px;font-family:Georgia,serif;font-size:1.3rem}',
+          targetHtml: '<div class="house-crest is-preview-active"><span>H</span><strong>Hufflepuff</strong><small>Trạng thái hover đang được mô phỏng</small></div>',
+          lines: [
+            { code: '.house-crest {', desc: 'Chọn mọi phần tử mang class house-crest.', apply: '' },
+            { code: '  border: 2px solid #4d5141;', desc: 'Đặt viền ban đầu trước khi người dùng tương tác.', apply: '.house-crest{border:2px solid #4d5141;}' },
+            { code: '  transition: all 0.3s ease;', desc: 'Cho phép các thay đổi diễn ra mượt trong 0,3 giây.', apply: '.house-crest{transition:all .3s ease;}' },
+            { code: '}', desc: 'Kết thúc quy tắc trạng thái bình thường.', apply: '' },
+            { code: '.house-crest:hover {', desc: 'Chỉ kích hoạt khi con trỏ chuột ở trên huy hiệu.', apply: '' },
+            { code: '  transform: scale(1.08);', desc: 'Phóng to huy hiệu lên 8% để tạo phản hồi trực quan.', apply: '.house-crest.is-preview-active{transform:scale(1.08);}' },
+            { code: '  border-color: #ead9ad;', desc: 'Đổi màu viền sang vàng kem, làm nổi bật trạng thái hover.', apply: '.house-crest.is-preview-active{border-color:#ead9ad;background-color:#273526;}' },
+            { code: '}', desc: 'Đóng quy tắc hover.', apply: '' }
+          ]
+        },
+        exercise: {
+          title: 'Bài tập 2 · Huy hiệu phản hồi', brief: 'Khi rê chuột lên .sorting-hat, hãy phóng to nhẹ và đổi màu viền.', requirements: ['.sorting-hat:hover', 'transform: scale(1.08)', 'border-color: #ead9ad'],
+          starter: '.sorting-hat {\n  transition: transform .25s ease;\n}\n.sorting-hat:hover {\n  /* Viết hiệu ứng tại đây */\n}',
+          hint: 'Trong khối .sorting-hat:hover, thêm transform: scale(1.08); và border-color: #ead9ad;',
+          baseCss: '.sorting-hat{display:grid;place-items:center;width:220px;height:145px;border:2px solid #4d5141;border-radius:12px;background:#151c16;font-family:Georgia,serif;font-size:1.4rem;transition:all .25s ease}',
+          previewHtml: '<div class="sorting-hat">Chiếc Nón</div>', xp: 40,
+          validator: (css) => normalizeCss(css).includes('.sorting-hat:hover{') && hasDeclaration(css, 'transform', 'scale(1.08)') && hasDeclaration(css, 'border-color', '#ead9ad')
+        },
+        project: {
+          title: 'Dự án 2 · Biểu tượng bốn nhà', brief: 'Tạo huy hiệu có hiệu ứng hover và một đường viền focus rõ ràng cho người dùng bàn phím.', requirements: ['.house-banner:hover', '.house-banner:focus-visible', 'outline: 3px solid #c7ab6b'],
+          starter: '.house-banner {\n  padding: 16px 24px;\n  border: 1px solid #485744;\n  background: #17241c;\n}\n/* Thêm hover và focus-visible */',
+          hint: 'Dùng transform: translateY(-3px) cho hover. Với :focus-visible, thêm outline: 3px solid #c7ab6b;',
+          baseCss: '.house-banner{display:inline-block;width:240px;border-radius:10px;font-family:Georgia,serif;font-size:1.3rem;text-align:center;transition:transform .2s ease}.house-banner:focus{outline:none}',
+          previewHtml: '<button class="house-banner">Chọn ngôi nhà của bạn</button>', xp: 80,
+          validator: (css) => normalizeCss(css).includes('.house-banner:hover{') && normalizeCss(css).includes('.house-banner:focus-visible{') && hasDeclaration(css, 'outline', '3px solid #c7ab6b')
+        }
+      },
+      {
+        id: 3,
+        title: 'Vạc Bùa Chú',
+        artifact: 'Vạc nấu độc dược',
+        subtitle: 'Box Model và không gian vật lý',
+        location: 'Hầm Độc Dược',
+        icon: 'potion',
+        time: 22,
+        story: 'Một lớp độc dược cân bằng không thể thiếu chiếc vạc vừa vặn. Trong CSS, mọi phần tử cũng là một chiếc hộp; hiểu nội dung, đệm, viền và lề là bí quyết giữ mọi thứ đúng chỗ.',
+        objectives: ['Mô tả content, padding, border và margin.', 'Dùng box-sizing: border-box để kiểm soát kích thước.', 'Căn giữa một hộp bằng margin auto.', 'Nhận diện hiện tượng margin collapsing.'],
+        recap: ['Với <code>content-box</code>, chiều rộng ngoài = width + padding + border; với <code>border-box</code>, padding và border nằm trong width đã đặt.', 'Shorthand 1–4 giá trị của padding/margin theo thứ tự trên, phải, dưới, trái; dùng <code>gap</code> khi container là flex hoặc grid.', '<code>width</code> đặt kích thước ưu tiên, <code>max-width</code> giới hạn trần, <code>min-width</code> giới hạn sàn; <code>margin: auto</code> căn giữa khi còn không gian ngang.', 'Margin dọc có thể gộp lại trong luồng thường; flex, grid, padding, border hoặc tạo block formatting context có thể ngăn hiện tượng này.'],
+        pitfall: 'Đặt width cố định nhưng quên <code>box-sizing: border-box</code> hoặc <code>max-width: 100%</code> là cách nhanh nhất để làm thẻ tràn màn hình nhỏ.',
+        theory: [
+          { title: 'Bốn lớp của Box Model', html: '<p>Từ trong ra: <strong>content</strong> chứa chữ hoặc ảnh; <strong>padding</strong> là đệm bên trong; <strong>border</strong> là viền; <strong>margin</strong> là khoảng cách bên ngoài, đẩy các hộp khác ra xa.</p>' },
+          { title: 'Kiểm soát chiều rộng', html: '<p>Với mặc định <code>content-box</code>, padding và border cộng thêm vào chiều rộng khai báo. Với <code>border-box</code>, tổng chiều rộng vẫn giữ giá trị bạn đặt. Dùng <code>max-width: 100%</code> để hộp không tràn màn hình nhỏ.</p>' },
+          { title: 'Căn giữa và margin collapsing', html: '<p><code>margin: 20px auto;</code> tạo lề trên dưới 20 pixel và căn giữa theo chiều ngang khi hộp có width. Lề dọc của hai hộp thường không cộng lại mà lấy giá trị lớn hơn, trừ khi chúng nằm trong flex hoặc grid container.</p>' }
+        ],
+        tags: [{ tag: '<div>', effect: 'Tạo hộp khối để thấy rõ Box Model.' }, { tag: '<span>', effect: 'Đánh dấu nội dung nhỏ bên trong hộp mà không phá vỡ bố cục.' }, { tag: '<section>', effect: 'Tạo vùng nội dung có thể đặt width, padding và margin.' }],
+        properties: [{ name: 'width / max-width', effect: 'Đặt chiều rộng và giới hạn chiều rộng.' }, { name: 'padding', effect: 'Tạo đệm bên trong viền.' }, { name: 'margin', effect: 'Tạo khoảng cách bên ngoài hộp.' }, { name: 'box-sizing', effect: 'Quyết định padding và border có nằm trong width hay không.' }],
+        inspector: {
+          filename: 'potion-box.css',
+          baseCss: '.potion-box{background:#132019;border:1px solid #485744;border-radius:4px;font-family:Georgia,serif;text-align:center}.potion-box strong{display:block;font-size:1.25rem}.potion-box span{display:block;margin-top:7px;color:#a59e8c}',
+          targetHtml: '<div class="potion-box"><strong>Vạc Bùa Chú</strong><span>Content bên trong lớp đệm</span></div>',
+          lines: [
+            { code: '.potion-box {', desc: 'Chọn chiếc vạc chứa nội dung.', apply: '' },
+            { code: '  box-sizing: border-box;', desc: 'Giữ width 280px bao gồm cả padding và border.', apply: '.potion-box{box-sizing:border-box;}' },
+            { code: '  width: 280px;', desc: 'Đặt bề rộng tối đa của hộp.', apply: '.potion-box{width:280px;}' },
+            { code: '  padding: 20px;', desc: 'Thêm 20 pixel đệm ở cả bốn phía bên trong.', apply: '.potion-box{padding:20px;}' },
+            { code: '  border: 3px solid #c7ab6b;', desc: 'Thêm viền đồng dày 3 pixel.', apply: '.potion-box{border:3px solid #c7ab6b;}' },
+            { code: '  margin: 16px auto;', desc: 'Tạo lề dọc và căn giữa hộp theo chiều ngang.', apply: '.potion-box{margin:16px auto;}' },
+            { code: '}', desc: 'Kết thúc quy tắc Box Model.', apply: '' }
+          ]
+        },
+        exercise: {
+          title: 'Bài tập 3 · Chiếc hộp vừa vặn', brief: 'Giữ chiều rộng 280px và tạo đệm 20px, viền 3px màu đồng.', requirements: ['box-sizing: border-box', 'width: 280px', 'padding: 20px', 'border: 3px solid #c7ab6b'],
+          starter: '.potion-box {\n  box-sizing: border-box;\n  width: ____;\n  padding: ____;\n  border: 3px solid #c7ab6b;\n}',
+          hint: 'Điền width: 280px và padding: 20px. Nhớ giữ box-sizing: border-box.',
+          baseCss: '.potion-box{display:grid;place-items:center;min-height:130px;background:#132019;font-family:Georgia,serif;font-size:1.2rem;text-align:center}',
+          previewHtml: '<div class="potion-box">Bình thuốc sáng</div>', xp: 40,
+          validator: (css) => hasDeclaration(css, 'box-sizing', 'border-box') && hasDeclaration(css, 'width', '280px') && hasDeclaration(css, 'padding', '20px') && hasDeclaration(css, 'border', '3px solid #c7ab6b')
+        },
+        project: {
+          title: 'Dự án 3 · Kệ thuốc không tràn màn hình', brief: 'Tạo một thẻ bài giới hạn chiều rộng, căn giữa và có đệm thoải mái.', requirements: ['.potion-card', 'width: 320px', 'max-width: 100%', 'margin: 24px auto', 'padding: 20px'],
+          starter: '.potion-card {\n  width: 320px;\n  /* Thêm max-width, margin và padding */\n}',
+          hint: 'Thêm max-width: 100%; margin: 24px auto; và padding: 20px; vào .potion-card.',
+          baseCss: '.potion-card{border:1px solid #485744;border-radius:10px;background:#132019;font-family:Georgia,serif;text-align:center}.potion-card strong{display:block;font-size:1.2rem}.potion-card span{color:#a59e8c}',
+          previewHtml: '<div class="potion-card"><strong>Thuốc Giải Độc</strong><span>Đặt trong hộp kính có đệm</span></div>', xp: 80,
+          validator: (css) => normalizeCss(css).includes('.potion-card{') && hasDeclaration(css, 'width', '320px') && hasDeclaration(css, 'max-width', '100%') && hasDeclaration(css, 'margin', '24pxauto') && hasDeclaration(css, 'padding', '20px')
+        }
+      },
+      {
+        id: 4,
+        title: 'Áo Choàng Tàng Hình',
+        artifact: 'Áo Choàng Tàng Hình',
+        subtitle: 'Màu sắc, độ mờ và chiều sâu',
+        location: 'Hành Lang Bóng Tối',
+        icon: 'cloak',
+        time: 20,
+        story: 'Áo choàng không xóa vật thể khỏi thế giới; nó chỉ thay đổi cách ánh sáng đi qua bề mặt. CSS có cùng sức mê hoặc ấy qua opacity, màu alpha và những lớp bóng tinh tế.',
+        objectives: ['Phân biệt display none, visibility hidden và opacity 0.', 'Đọc bốn thành phần của rgba().', 'Tạo bóng nhiều lớp tự nhiên.', 'Dùng backdrop-filter có chừng mực.'],
+        recap: ['<code>display: none</code> không giữ chỗ; <code>visibility: hidden</code> giữ chỗ; <code>opacity: 0</code> trong suốt nhưng vẫn có thể nhận sự kiện.', 'Alpha trong <code>rgba()</code> chỉ ảnh hưởng màu đó; <code>opacity</code> ảnh hưởng cả phần tử lẫn toàn bộ nội dung con.', 'Mỗi lớp <code>box-shadow</code> gồm x, y, blur, spread và màu; thêm <code>inset</code> để tạo bóng trong thay vì bóng ngoài.', '<code>backdrop-filter</code>, opacity và bóng lớn có thể tạo stacking context hoặc tốn GPU; hạn chế bề mặt lớn và kiểm tra trên thiết bị yếu.'],
+        pitfall: 'Dùng <code>opacity: 0</code> để “xóa” nút nhưng vẫn để nút nhận click; hãy kết hợp <code>pointer-events: none</code>, <code>visibility: hidden</code> hoặc <code>display: none</code> phù hợp.',
+        theory: [
+          { title: 'Ba cách biến một phần tử thành vô hình', html: '<p><code>display: none</code> loại phần tử khỏi luồng và không giữ chỗ. <code>visibility: hidden</code> ẩn nội dung nhưng vẫn giữ không gian. <code>opacity: 0</code> làm trong suốt toàn bộ phần tử nhưng nó vẫn có thể nhận tương tác.</p>' },
+          { title: 'Kênh alpha và bóng nhiều lớp', html: '<p><code>rgba(199, 171, 107, 0.4)</code> gồm đỏ, xanh lục, xanh dương và alpha từ 0 đến 1. Nhiều lớp <code>box-shadow</code> cách nhau bằng dấu phẩy giúp vật thể có bóng sát và bóng lan rộng hơn.</p>' },
+          { title: 'Kính mờ và hiệu năng', html: '<p><code>backdrop-filter: blur(8px)</code> làm mờ nền phía sau phần tử. Hiệu ứng này đẹp nhưng tốn tài nguyên; hãy dùng trên một vài bề mặt nhỏ, không phủ kín toàn trang.</p>' }
+        ],
+        tags: [{ tag: '<div>', effect: 'Tạo lớp nền có thể đặt opacity và box-shadow.' }, { tag: '<span>', effect: 'Hiển thị chữ nổi trên lớp trong suốt.' }, { tag: '<body>', effect: 'Là nền chung để quan sát màu alpha và hiệu ứng kính mờ.' }],
+        properties: [{ name: 'opacity', effect: 'Đặt độ mờ của toàn bộ phần tử và nội dung con.' }, { name: 'rgba()', effect: 'Tạo màu có kênh alpha riêng cho nền.' }, { name: 'box-shadow', effect: 'Thêm một hoặc nhiều lớp bóng.' }, { name: 'backdrop-filter', effect: 'Làm mờ nằm sau bề mặt phần tử.' }],
+        inspector: {
+          filename: 'invisibility.css',
+          baseCss: '.cloak-panel{display:grid;place-items:center;min-width:260px;min-height:150px;border:1px solid #485744;border-radius:8px;background:repeating-linear-gradient(45deg,#142219,#142219 12px,#18271e 12px,#18271e 24px);font-family:Georgia,serif;transition:all .2s ease}.cloak-panel strong{font-size:1.25rem}',
+          targetHtml: '<div class="cloak-panel"><strong>Áo Choàng Tàng Hình</strong><span>Ánh sáng đi qua từng lớp vải</span></div>',
+          lines: [
+            { code: '.cloak-panel {', desc: 'Chọn bề mặt áo choàng trong vùng xem trước.', apply: '' },
+            { code: '  background: rgba(24, 39, 30, 0.72);', desc: 'Tạo nền xanh rêu đục 72%, để hơi lộ họa tiết phía sau.', apply: '.cloak-panel{background:rgba(24,39,30,.72);}' },
+            { code: '  box-shadow: 0 4px 10px rgba(0,0,0,.35),', desc: 'Lớp bóng thứ nhất tạo khoảng cách nhỏ với mặt đất.', apply: '.cloak-panel{box-shadow:0 4px 10px rgba(0,0,0,.35);}' },
+            { code: '              0 18px 40px rgba(0,0,0,.5);', desc: 'Lớp bóng thứ hai lan rộng, tạo chiều sâu huyền bí.', apply: '.cloak-panel{box-shadow:0 4px 10px rgba(0,0,0,.35),0 18px 40px rgba(0,0,0,.5);}' },
+            { code: '  opacity: 0.85;', desc: 'Làm toàn bộ áo và chữ còn 85% độ đục.', apply: '.cloak-panel{opacity:.85;}' },
+            { code: '}', desc: 'Đóng quy tắc; nhiều giá trị shadow vẫn thuộc cùng một khai báo.', apply: '' }
+          ]
+        },
+        exercise: {
+          title: 'Bài tập 4 · Lớp sương bán trong suốt', brief: 'Dùng rgba cho nền và opacity 0.85 cho toàn bộ thẻ.', requirements: ['.mist-panel', 'background: rgba(24, 39, 30, 0.72)', 'opacity: 0.85'],
+          starter: '.mist-panel {\n  background: ____;\n  opacity: 0.85;\n}',
+          hint: 'Thế ____ bằng rgba(24, 39, 30, 0.72). Alpha 0,72 tạo độ đục 72%.',
+          baseCss: '.mist-panel{display:grid;place-items:center;width:250px;height:155px;border:1px solid #6f7a63;border-radius:10px;background:repeating-linear-gradient(45deg,#263b2c,#263b2c 14px,#324936 14px,#324936 28px);font-family:Georgia,serif;font-size:1.25rem;text-align:center}',
+          previewHtml: '<div class="mist-panel">Lớp sương</div>', xp: 40,
+          validator: (css) => normalizeCss(css).includes('.mist-panel{') && hasDeclaration(css, 'background', 'rgba(24,39,30,0.72)') && hasDeclaration(css, 'opacity', '0.85')
+        },
+        project: {
+          title: 'Dự án 4 · Thiệp mời huyền bí', brief: 'Tạo thiệp nổi trên nền với hai lớp bóng và màu nền bán trong suốt.', requirements: ['.invitation', 'rgba(', 'box-shadow:', 'border-radius: 14px'],
+          starter: '.invitation {\n  padding: 22px 28px;\n  border: 1px solid #c7ab6b;\n  /* Thêm rgba và box-shadow */\n}',
+          hint: 'Đặt background: rgba(18, 30, 23, 0.82); box-shadow: 0 3px 8px rgba(0,0,0,.3), 0 18px 35px rgba(0,0,0,.45);',
+          baseCss: '.invitation{display:grid;place-items:center;width:300px;min-height:145px;background:repeating-linear-gradient(45deg,#213327,#213327 15px,#2b4231 15px,#2b4231 30px);font-family:Georgia,serif;text-align:center}.invitation strong{font-size:1.25rem}',
+          previewHtml: '<div class="invitation"><strong>Mời dự tiệc trăng</strong><span>Đại Sảnh Đường · 20:00</span></div>', xp: 80,
+          validator: (css) => normalizeCss(css).includes('.invitation{') && normalizeCss(css).includes('rgba(') && normalizeCss(css).includes('box-shadow:') && hasDeclaration(css, 'border-radius', '14px')
+        }
+      },
+      {
+        id: 5,
+        title: 'Tiệc Đại Sảnh Đường',
+        artifact: 'Bữa tiệc bốn nhà',
+        subtitle: 'Flexbox và bố cục một chiều',
+        location: 'Đại Sảnh Đường',
+        icon: 'feast',
+        time: 26,
+        story: 'Bốn nhà ngồi quanh những dãy bàn dài. Flexbox giúp bạn sắp xếp các phần tử theo một hàng hoặc một cột, phân bổ khoảng trống và co giãn đều như một người quản tiệc điêu luyện.',
+        objectives: ['Nhận biết flex container và flex item.', 'Phân biệt trục chính và trục phụ.', 'Dùng justify-content, align-items và gap.', 'Điều khiển co giãn bằng flex.'],
+        recap: ['Flex container quản lý các item theo một trục chính; <code>flex-direction</code> đổi hàng/cột và làm trục chính, trục phụ đổi theo.', '<code>justify-content</code> phân bổ không gian trên trục chính; <code>align-items</code> căn item trên trục phụ; <code>align-self</code> ghi đè cho một item.', '<code>flex: 1</code> tương đương <code>1 1 0%</code>; <code>flex-basis</code> là kích thước khởi đầu trước khi co giãn, không phải width cuối cùng.', 'Dùng <code>flex-wrap: wrap</code> và <code>min-width: 0</code> cho nội dung dài; <code>gap</code> thay thế nhiều margin thủ công và không tạo khoảng trống ngoài cùng.'],
+        pitfall: 'Căn bằng <code>align-items</code> khi item đang tràn theo trục chính thường không có tác dụng mong muốn; hãy kiểm tra <code>flex-direction</code> và <code>flex-wrap</code> trước.',
+        theory: [
+          { title: 'Một hướng chảy, hai trục', html: '<p>Khi cha có <code>display: flex</code>, các con trở thành flex item. Mặc định chảy theo hàng: trục chính nằm ngang, trục phụ nằm dọc. Đổi <code>flex-direction: column</code> để trục chính chạy dọc.</p>' },
+          { title: 'Phân bổ và căn chỉnh', html: '<p><code>justify-content</code> phân bổ không gian theo trục chính. <code>align-items</code> căn các item theo trục phụ. <code>gap</code> tạo khoảng cách đều giữa item mà không cần margin thủ công.</p>' },
+          { title: 'Co giãn và xuống dòng', html: '<p><code>flex: 1</code> cho phép item lớn để lấp không gian trống. <code>flex-wrap: wrap</code> cho phép item xuống hàng khi hết chỗ. Dùng <code>min-width: 0</code> trên item chứa văn bản dài để tránh tràn.</p>' }
+        ],
+        tags: [{ tag: '<nav>', effect: 'Nhóm các liên kết điều hướng; thường dùng flex để căn ngang.' }, { tag: '<button>', effect: 'Tạo từng mục tương tác trong hàng flex.' }, { tag: '<div>', effect: 'Tạo flex container chứa các món ăn hoặc thẻ.' }],
+        properties: [{ name: 'display: flex', effect: 'Kích hoạt bố cục Flexbox.' }, { name: 'justify-content', effect: 'Phân bổ item trên trục chính.' }, { name: 'align-items', effect: 'Căn item trên trục phụ.' }, { name: 'gap', effect: 'Tạo khoảng cách giữa hàng và cột.' }, { name: 'flex: 1', effect: 'Cho item co giãn chiếm không gian khả dụng.' }],
+        inspector: {
+          filename: 'great-hall.css',
+          baseCss: '.feast{display:flex;width:100%;max-width:430px;gap:0;background:#111b14;border:1px solid #485744;border-radius:10px;padding:12px}.dish{flex:0 0 auto;padding:12px 14px;border-radius:7px;background:#24382a;font-family:Georgia,serif;font-size:.88rem;text-align:center}.dish:nth-child(2){background:#4a2730}.dish:nth-child(3){background:#493f26}',
+          targetHtml: '<div class="feast"><div class="dish">Gryffindor</div><div class="dish">Slytherin</div><div class="dish">Ravenclaw</div></div>',
+          lines: [
+            { code: '.feast {', desc: 'Chọn dãy bàn tiệc.', apply: '' },
+            { code: '  display: flex;', desc: 'Đặt ba món ăn trên cùng một hàng flex.', apply: '.feast{display:flex;}' },
+            { code: '  justify-content: space-between;', desc: 'Đẩy món đầu và món cuối ra hai mép, chia khoảng trống ở giữa.', apply: '.feast{justify-content:space-between;}' },
+            { code: '  align-items: center;', desc: 'Căn các món theo giữa trục phụ.', apply: '.feast{align-items:center;}' },
+            { code: '  gap: 14px;', desc: 'Tạo khoảng cách 14 pixel giữa các món.', apply: '.feast{gap:14px;}' },
+            { code: '}', desc: 'Kết thúc quy tắc bố cục bàn tiệc.', apply: '' }
+          ]
+        },
+        exercise: {
+          title: 'Bài tập 5 · Sắp xuyên bàn tiệc', brief: 'Biến .feast thành flex và dàn đều các món ăn.', requirements: ['display: flex', 'justify-content: space-between', 'gap: 14px'],
+          starter: '.feast {\n  display: flex;\n  justify-content: ____;\n  gap: 14px;\n}',
+          hint: 'Thế ____ bằng space-between để đẩy các món ra hai đầu.',
+          baseCss: '.feast{width:360px;padding:12px;background:#111b14;border:1px solid #485744;border-radius:9px}.dish{padding:12px 14px;border-radius:6px;background:#24382a;font-family:Georgia,serif}',
+          previewHtml: '<div class="feast"><div class="dish">Bàn 1</div><div class="dish">Bàn 2</div><div class="dish">Bàn 3</div></div>', xp: 40,
+          validator: (css) => hasDeclaration(css, 'display', 'flex') && hasDeclaration(css, 'justify-content', 'space-between') && hasDeclaration(css, 'gap', '14px')
+        },
+        project: {
+          title: 'Dự án 5 · Thanh điều hướng Đại Sảnh', brief: 'Tạo một hàng liên kết cân đối, có khoảng cách và căn giữa.', requirements: ['.hall-nav', 'display: flex', 'justify-content: center', 'align-items: center', 'gap: 12px'],
+          starter: '.hall-nav {\n  padding: 14px;\n  background: #17241c;\n  /* Hoàn thành bố cục flex */\n}',
+          hint: 'Thêm display: flex; justify-content: center; align-items: center; gap: 12px;',
+          baseCss: '.hall-nav a{display:inline-block;padding:8px 14px;border:1px solid #4d5d48;border-radius:7px;color:#ead9ad;text-decoration:none;font-family:Georgia,serif}',
+          previewHtml: '<nav class="hall-nav"><a href="#library">Thư viện</a><a href="#hall">Đại sảnh</a><a href="#grounds">Sân trường</a></nav>', xp: 80,
+          validator: (css) => normalizeCss(css).includes('.hall-nav{') && hasDeclaration(css, 'display', 'flex') && hasDeclaration(css, 'justify-content', 'center') && hasDeclaration(css, 'align-items', 'center') && hasDeclaration(css, 'gap', '12px')
+        }
+      },
+      {
+        id: 6,
+        title: 'Bản Đồ Đạo Tặc',
+        artifact: 'Bản Đồ Đạo Tặc',
+        subtitle: 'CSS Grid và bố cục hai chiều',
+        location: 'Thư Viện Bản Đồ',
+        icon: 'grid',
+        time: 28,
+        story: 'Một tấm bản đồ cần cả hàng lẫn cột. Grid cho phép bạn vẽ khu vực bằng những cái tên dễ hiểu, rồi đặt từng căn phòng vào đúng vị trí như những dấu chân trên giấy da.',
+        objectives: ['Phân biệt Grid hai chiều và Flexbox một chiều.', 'Dùng fr, repeat() và minmax().', 'Đặt khoảng cách bằng gap.', 'Vẽ bố cục bằng grid-template-areas.'],
+        recap: ['Grid track có thể là <code>px</code>, <code>%</code>, <code>fr</code> hoặc <code>minmax()</code>; <code>repeat()</code> rút gọn nhiều track lặp lại.', '<code>auto-fit</code> cho phép track co giãn và tự thu gọn; <code>auto-fill</code> giữ số track trống khi còn chỗ, rất hữu ích cho thư viện ảnh.', '<code>grid-template-areas</code> tạo vùng hình chữ nhật có tên; mỗi item dùng <code>grid-area</code>, nhưng không được ghép vùng không liền nhau.', 'Grid có track tường minh và track ngầm; <code>grid-auto-flow</code>, <code>grid-auto-rows</code> và các thuộc tính căn chỉnh giúp xử lý nội dung sinh thêm.'],
+        pitfall: 'Item có nội dung dài có thể làm track mở rộng ngoài dự kiến; thử <code>minmax(0, 1fr)</code> và <code>min-width: 0</code> thay vì chỉ giảm font chữ.',
+        theory: [
+          { title: 'Khi nào nên dùng Grid', html: '<p>Grid mạnh khi cần kiểm soát đồng thời hàng và cột: bố cục trang, thư viện ảnh, dashboard. Flexbox phù hợp hơn cho thanh điều hướng hoặc một dãy phần tử chảy theo một hướng.</p>' },
+          { title: 'Cột linh hoạt với fr và minmax', html: '<p><code>1fr</code> chia không gian còn lại thành các phần bằng nhau. <code>repeat(3, 1fr)</code> tạo ba cột. <code>minmax(220px, 1fr)</code> giữ cột tối thiểu 220 pixel nhưng vẫn co giãn.</p>' },
+          { title: 'Đặt tên cho từng vùng', html: '<p><code>grid-template-areas</code> cho phép viết bố cục như một sơ đồ: <code>"header header" "sidebar main" "footer footer"</code>. Mỗi item dùng <code>grid-area</code> để nhận tên vùng tương ứng.</p>' }
+        ],
+        tags: [{ tag: '<main>', effect: 'Vùng nội dung chính, có thể chiếm một ô grid.' }, { tag: '<aside>', effect: 'Vùng phụ như mục lục hoặc bảng điều khiển.' }, { tag: '<header>', effect: 'Phần đầu trang, thường trải rộng nhiều cột.' }],
+        properties: [{ name: 'display: grid', effect: 'Kích hoạt lưới hai chiều.' }, { name: 'grid-template-columns', effect: 'Định nghĩa số cột và độ rộng.' }, { name: 'grid-template-rows', effect: 'Định nghĩa số hàng và chiều cao.' }, { name: 'gap', effect: 'Tạo rãnh giữa hàng và cột.' }, { name: 'grid-area', effect: 'Đặt item vào vùng đã đặt tên.' }],
+        inspector: {
+          filename: 'marauders-map.css',
+          baseCss: '.map-grid{display:block;width:100%;max-width:420px;background:#111b14;border:1px solid #485744;border-radius:10px;padding:12px}.room{padding:17px 10px;margin-top:7px;border:1px solid #4d5d48;border-radius:6px;background:#213126;font-family:Georgia,serif;text-align:center;font-size:.85rem}',
+          targetHtml: '<div class="map-grid"><div class="room">Thư Viện</div><div class="room">Đại Sảnh</div><div class="room">Hầm Ngục</div></div>',
+          lines: [
+            { code: '.map-grid {', desc: 'Chọn vùng chứa bản đồ.', apply: '' },
+            { code: '  display: grid;', desc: 'Kích hoạt hệ thống lưới hai chiều.', apply: '.map-grid{display:grid;}' },
+            { code: '  grid-template-columns: repeat(3, 1fr);', desc: 'Tạo ba cột bằng nhau; fr chia không gian còn lại.', apply: '.map-grid{grid-template-columns:repeat(3,1fr);}' },
+            { code: '  gap: 10px;', desc: 'Tạo rãnh 10 pixel giữa hàng và cột.', apply: '.map-grid{gap:10px;}' },
+            { code: '}', desc: 'Kết thúc quy tắc lưới.', apply: '' }
+          ]
+        },
+        exercise: {
+          title: 'Bài tập 6 · Ba căn phòng', brief: 'Tạo lưới ba cột bằng nhau với khoảng cách 10px.', requirements: ['display: grid', 'grid-template-columns: repeat(3, 1fr)', 'gap: 10px'],
+          starter: '.map-grid {\n  display: grid;\n  grid-template-columns: ____;\n  gap: 10px;\n}',
+          hint: 'Thế ____ bằng repeat(3, 1fr). Mỗi 1fr chiếm một phần bằng nhau.',
+          baseCss: '.map-grid{width:390px;padding:12px;background:#111b14;border:1px solid #485744;border-radius:9px}.room{padding:18px 10px;border:1px solid #4d5d48;border-radius:6px;background:#213126;text-align:center;font-family:Georgia,serif}',
+          previewHtml: '<div class="map-grid"><div class="room">Thư viện</div><div class="room">Đại sảnh</div><div class="room">Hầm ngục</div></div>', xp: 40,
+          validator: (css) => hasDeclaration(css, 'display', 'grid') && hasDeclaration(css, 'grid-template-columns', 'repeat(3,1fr)') && hasDeclaration(css, 'gap', '10px')
+        },
+        project: {
+          title: 'Dự án 6 · Sơ đồ trang Hogwarts', brief: 'Dùng grid-template-areas để tạo header, sidebar, main và footer.', requirements: ['display: grid', 'grid-template-columns: 120px 1fr', 'grid-template-areas', 'gap: 10px'],
+          starter: '.academy-layout {\n  display: grid;\n  /* Khai báo columns, areas và gap */\n}\n.header { grid-area: header; }\n.sidebar { grid-area: sidebar; }\n.main { grid-area: main; }\n.footer { grid-area: footer; }',
+          hint: 'Dùng grid-template-columns: 120px 1fr; grid-template-areas: "header header" "sidebar main" "footer footer"; gap: 10px;',
+          baseCss: '.academy-layout{width:420px;background:#111b14;border:1px solid #485744;border-radius:9px;padding:10px}.academy-layout>div{padding:13px;border:1px solid #4d5d48;border-radius:6px;background:#213126;font-family:Georgia,serif;font-size:.82rem}.header,.footer{background:#3e3827}.sidebar{background:#4a2730}',
+          previewHtml: '<div class="academy-layout"><div class="header">HOGWARTS CSS</div><div class="sidebar">Mục lục</div><div class="main">Nội dung bài học</div><div class="footer">Chân trang</div></div>', xp: 80,
+          validator: (css) => normalizeCss(css).includes('.academy-layout{') && hasDeclaration(css, 'display', 'grid') && hasDeclaration(css, 'grid-template-columns', '120px1fr') && normalizeCss(css).includes('grid-template-areas:') && hasDeclaration(css, 'gap', '10px')
+        }
+      },
+      {
+        id: 7,
+        title: 'Trận Quidditch',
+        artifact: 'Quả Snitch Vàng',
+        subtitle: 'Position và z-index',
+        location: 'Sân Quidditch',
+        icon: 'snitch',
+        time: 23,
+        story: 'Quả Snitch bay rất nhanh, nhưng vẫn ở trong sân. Muốn đặt một phần tử vào vị trí chính xác mà không làm xáo trộn luồng, bạn cần chọn đúng position và lớp xếp chồng.',
+        objectives: ['Phân biệt năm giá trị của position.', 'Tạo điểm tựa bằng relative và đặt con bằng absolute.', 'Dùng top, right, bottom và left.', 'Kiểm soát thứ tự lớp bằng z-index.'],
+        recap: ['<code>absolute</code> neo theo padding box của tổ tiên position gần nhất; nếu không có tổ tiên position, nó có thể neo theo initial containing block.', 'Dùng <code>inset</code> để đặt đồng thời top/right/bottom/left; khi item absolute có kích thước cố định, không cần khai báo cả bốn cạnh.', '<code>z-index</code> hoạt động trong stacking context, không phải một bảng xếp hạng toàn cục; opacity, transform và filter cũng có thể tạo stacking context.', '<code>sticky</code> cần ngưỡng như <code>top: 0</code> và có thể bị giới hạn bởi cha; <code>overflow</code> của cha có thể cắt hoặc thay đổi hành vi cuộn.'],
+        pitfall: 'Đặt <code>z-index: 9999</code> không sửa được phần tử đang bị cha cắt bớt; hãy kiểm tra <code>overflow</code>, stacking context và đúng điểm tựa định vị.',
+        theory: [
+          { title: 'Năm chế độ định vị', html: '<p><code>static</code> là luồng mặc định. <code>relative</code> dịch chuyển tương đối so với vị trí ban đầu. <code>absolute</code> thoát khỏi luồng và neo theo tổ tiên position gần nhất. <code>fixed</code> neo theo viewport. <code>sticky</code> vừa cuộn vừa ghim khi tới ngưỡng.</p>' },
+          { title: 'Cha relative, con absolute', html: '<p>Để Snitch bay trong sân thay vì bay theo toàn trang, đặt <code>position: relative</code> cho sân. Sau đó dùng <code>position: absolute</code> cùng <code>top</code> và <code>right</code> cho Snitch.</p>' },
+          { title: 'Thứ tự lớp xếp chồng', html: '<p><code>z-index</code> quyết định phần tử nào nằm trên. Giá trị lớn hơn thường nằm trên, nhưng chỉ hoạt động rõ ràng khi phần tử đã được position hoặc nằm trong flex/grid. Không nên dùng z-index rất lớn để che lỗi bố cục.</p>' }
+        ],
+        tags: [{ tag: '<header>', effect: 'Thanh đầu trang thường được đặt position: sticky để ghim khi cuộn.' }, { tag: '<span>', effect: 'Đánh dấu Quả Snitch cần định vị absolute trong sân.' }, { tag: '<div>', effect: 'Tạo sân chứa position: relative làm điểm tựa.' }],
+        properties: [{ name: 'position', effect: 'Chọn cách phần tử tham gia vào luồng và định vị.' }, { name: 'top / right', effect: 'Đặt khoảng cách từ mép trên hoặc phải của vùng chứa.' }, { name: 'z-index', effect: 'Sắp xếp phần tử theo lớp xếp chồng.' }, { name: 'sticky', effect: 'Ghim phần tử sau khi cuộn tới ngưỡng đã đặt.' }],
+        inspector: {
+          filename: 'quidditch.css',
+          baseCss: '.pitch{width:100%;max-width:420px;height:205px;overflow:hidden;border:1px dashed #758166;border-radius:12px;background:repeating-linear-gradient(90deg,#17271c,#17271c 55px,#1d3022 55px,#1d3022 110px)}.pitch::after{content:"SÂN QUIDDITCH";position:absolute;left:16px;bottom:12px;color:#72806e;font-family:Georgia,serif;font-size:.75rem;letter-spacing:2px}.snitch{font-size:2.2rem;filter:drop-shadow(0 0 10px #d9bd6c)}',
+          targetHtml: '<div class="pitch"><span class="snitch">S</span></div>',
+          lines: [
+            { code: '.pitch {', desc: 'Chọn sân chứa Quả Snitch.', apply: '' },
+            { code: '  position: relative;', desc: 'Biến sân thành điểm tựa cho phần tử absolute bên trong.', apply: '.pitch{position:relative;}' },
+            { code: '  overflow: hidden;', desc: 'Giữ Quả Snitch không bay ra ngoài khung sân.', apply: '.pitch{overflow:hidden;}' },
+            { code: '}', desc: 'Kết thúc quy tắc của sân.', apply: '' },
+            { code: '.snitch {', desc: 'Chọn Quả Snitch.', apply: '' },
+            { code: '  position: absolute;', desc: 'Cho Snitch thoát khỏi luồng và định vị theo sân.', apply: '.snitch{position:absolute;}' },
+            { code: '  top: 24px;', desc: 'Đặt Snitch cách mép trên sân 24 pixel.', apply: '.snitch{top:24px;}' },
+            { code: '  right: 28px;', desc: 'Đặt Snitch cách mép phải sân 28 pixel.', apply: '.snitch{right:28px;}' },
+            { code: '  z-index: 2;', desc: 'Đặt Snitch ở lớp trên các chi tiết trang trí của sân.', apply: '.snitch{z-index:2;}' },
+            { code: '}', desc: 'Đóng quy tắc Snitch.', apply: '' }
+          ]
+        },
+        exercise: {
+          title: 'Bài tập 7 · Bay trong sân', brief: 'Định vị .snitch tuyệt đối, cách trên 20px và phải 30px.', requirements: ['position: absolute', 'top: 20px', 'right: 30px'],
+          starter: '.snitch {\n  position: absolute;\n  top: ____;\n  right: ____;\n}',
+          hint: 'Điền top: 20px và right: 30px. Sân trong preview đã có position: relative.',
+          baseCss: '.pitch{position:relative;width:370px;height:180px;border:1px dashed #758166;border-radius:12px;background:#17271c}.snitch{display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:#c7ab6b;color:#171b12;font-family:Georgia,serif;font-weight:bold}',
+          previewHtml: '<div class="pitch"><span class="snitch">S</span></div>', xp: 40,
+          validator: (css) => hasDeclaration(css, 'position', 'absolute') && hasDeclaration(css, 'top', '20px') && hasDeclaration(css, 'right', '30px')
+        },
+        project: {
+          title: 'Dự án 7 · Bảng điểm nổi trên sân', brief: 'Tạo sân relative và đặt bảng điểm absolute vào góc trên phải với z-index cao hơn.', requirements: ['.quidditch-pitch', 'position: relative', '.score-board', 'position: absolute', 'z-index: 5'],
+          starter: '.quidditch-pitch {\n  /* Thêm position: relative */\n}\n.score-board {\n  /* Thêm absolute, top, right và z-index */\n}',
+          hint: 'Cho .quidditch-pitch position: relative. Cho .score-board position: absolute; top: 14px; right: 14px; z-index: 5;',
+          baseCss: '.quidditch-pitch{width:390px;height:190px;overflow:hidden;border:1px solid #4d5d48;border-radius:12px;background:repeating-linear-gradient(90deg,#17271c,#17271c 60px,#1d3022 60px,#1d3022 120px)}.score-board{padding:8px 14px;border:1px solid #c7ab6b;border-radius:7px;background:#101912;color:#ead9ad;font-family:Georgia,serif}',
+          previewHtml: '<div class="quidditch-pitch"><div class="score-board">Gryffindor 120 — Slytherin 90</div></div>', xp: 80,
+          validator: (css) => normalizeCss(css).includes('.quidditch-pitch{position:relative') && normalizeCss(css).includes('.score-board{position:absolute') && hasDeclaration(css, 'z-index', '5')
+        }
+      },
+      {
+        id: 8,
+        title: 'Thần Hộ Mệnh',
+        artifact: 'Thần Hộ Mệnh Expecto Patronum',
+        subtitle: 'Transform, Transition và Animation',
+        location: 'Rừng Thần Hộ Mệnh',
+        icon: 'patronus',
+        time: 27,
+        story: 'Khi bóng tối tiến lại, Thần Hộ Mệnh xuất hiện trong ánh sáng bạc. Animation là chuyển động bạn kể bằng những mốc thời gian; một chút nhịp điệu đúng chỗ làm giao diện sống động mà vẫn tập trung.',
+        objectives: ['Dùng transform để xoay, phóng to và dịch chuyển.', 'Tạo chuyển tiếp bằng transition.', 'Viết hoạt ảnh với @keyframes.', 'Tôn trọng prefers-reduced-motion.'],
+        recap: ['<code>transform</code> gộp nhiều hàm như <code>translate()</code>, <code>scale()</code>, <code>rotate()</code>; thứ tự hàm có thể thay đổi kết quả và <code>transform-origin</code> quyết định tâm biến đổi.', 'Transition cần trạng thái đầu và cuối; viết rõ <code>property</code>, <code>duration</code>, <code>timing-function</code>, <code>delay</code> thay vì <code>all</code> để kiểm soát hiệu ứng.', 'Animation gồm tên keyframes, thời lượng, hướng, số lần lặp và <code>fill-mode</code>; <code>forwards</code> giữ trạng thái cuối sau khi kết thúc.', 'Ưu tiên chuyển động <code>transform</code>/<code>opacity</code>; trong <code>prefers-reduced-motion</code> nên giảm hoặc bỏ chuyển động lớn, không chỉ rút ngắn thời lượng.'],
+        pitfall: 'Animation chạy ngay khi tải có thể làm người dùng mất tập trung; hãy chỉ chạy khi cần, có điểm dừng và luôn cung cấp phiên bản giảm chuyển động.',
+        theory: [
+          { title: 'Biến đổi không làm xáo luồng', html: '<p><code>transform</code> thay đổi hình học của phần tử mà không tính toán lại vị trí các hộp khác. <code>translate()</code> dịch chuyển, <code>scale()</code> phóng to, <code>rotate()</code> xoay, <code>skew()</code> nghiêng.</p>' },
+          { title: 'Transition cho thay đổi có điểm đến', html: '<p><code>transition: transform .4s ease;</code> làm thay đổi transform diễn ra trong 0,4 giây. Transition phù hợp với hover, focus hoặc thay đổi class; còn animation có thể tự chạy và lặp lại.</p>' },
+          { title: 'Kể chuyện bằng keyframes', html: '<p><code>@keyframes</code> định nghĩa các mốc 0%, 50%, 100%. Thuộc tính <code>animation</code> gắn tên, thời lượng, số lần lặp và hướng chạy. Luôn dùng <code>prefers-reduced-motion</code> để giảm chuyển động cho người cần.</p>' }
+        ],
+        tags: [{ tag: '<div>', effect: 'Tạo phần tử chuyển động, ví dụ Thần Hộ Mệnh hoặc lá bài.' }, { tag: '<button>', effect: 'Nhận hover/focus để transition phản hồi.' }, { tag: '<style>', effect: 'Chứa định nghĩa @keyframes và quy tắc prefers-reduced-motion.' }],
+        properties: [{ name: 'transform', effect: 'Biến đổi hình học phần tử.' }, { name: 'transition', effect: 'Tạo chuyển tiếp giữa trạng thái.' }, { name: '@keyframes', effect: 'Định nghĩa các mốc của một hoạt ảnh.' }, { name: 'animation', effect: 'Gắn keyframes, thời lượng và kiểu lặp.' }],
+        inspector: {
+          filename: 'patronus.css',
+          baseCss: '.patronus{display:grid;place-items:center;min-width:245px;min-height:160px;border:1px solid #4d6350;border-radius:12px;background:radial-gradient(circle,#22352a,#101912 70%);font-family:Georgia,serif}.patronus strong{font-size:2.6rem;color:#dcebdc;text-shadow:0 0 22px #a8cda9}.patronus span{margin-top:8px;color:#9eafa0}',
+          targetHtml: '<div class="patronus"><strong>P</strong><span>Expecto Patronum</span></div>',
+          lines: [
+            { code: '@keyframes patronusGlow {', desc: 'Bắt đầu định nghĩa kịch bản có tên patronusGlow.', apply: '@keyframes patronusGlow{from{transform:scale(.96);filter:brightness(.8)}to{transform:scale(1.08);filter:brightness(1.25)}}' },
+            { code: '  from { transform: scale(.96); }', desc: 'Mốc bắt đầu: hơi nhỏ hơn và ánh sáng dịu.', apply: '' },
+            { code: '  to { transform: scale(1.08); }', desc: 'Mốc kết thúc: lớn hơn 8%, tạo cảm giác lan tỏa.', apply: '' },
+            { code: '}', desc: 'Đóng định nghĩa keyframes.', apply: '' },
+            { code: '.patronus {', desc: 'Chọn vùng chứa Thần Hộ Mệnh.', apply: '' },
+            { code: '  animation: patronusGlow 1.8s', desc: 'Gắn kịch bản, mỗi lượt kéo dài 1,8 giây.', apply: '.patronus{animation:patronusGlow 1.8s ease-in-out infinite alternate;}' },
+            { code: '              infinite alternate;', desc: 'Lặp vô hạn và đảo hướng sau mỗi lượt để chuyển động tự nhiên.', apply: '' },
+            { code: '}', desc: 'Đóng quy tắc animation.', apply: '' }
+          ]
+        },
+        exercise: {
+          title: 'Bài tập 8 · Ánh sáng thở', brief: 'Tạo keyframes glow từ opacity .6 đến 1 rồi gắn vào .glow-orb.', requirements: ['@keyframes glow', 'opacity: 0.6', 'opacity: 1', 'animation: glow 2s infinite alternate'],
+          starter: '@keyframes glow {\n  from { opacity: ____; }\n  to { opacity: 1; }\n}\n.glow-orb {\n  animation: ____;\n}',
+          hint: 'Điền from opacity: 0.6 và animation: glow 2s infinite alternate.',
+          baseCss: '.glow-orb{display:grid;place-items:center;width:150px;height:150px;border:1px solid #8da48e;border-radius:50%;background:radial-gradient(circle,#dcebdc,#59725e 45%,#18271e 70%);font-family:Georgia,serif;color:#fff}',
+          previewHtml: '<div class="glow-orb">Lumos</div>', xp: 40,
+          validator: (css) => normalizeCss(css).includes('@keyframesglow{') && hasDeclaration(css, 'opacity', '0.6') && hasDeclaration(css, 'opacity', '1') && hasDeclaration(css, 'animation', 'glow2sinfinitealternate')
+        },
+        project: {
+          title: 'Dự án 8 · Thần Hộ Mệnh bay lên', brief: 'Tạo chuyển động translateY kết hợp opacity, lặp vô hạn và có hiệu ứng giảm chuyển động.', requirements: ['@keyframes patronusFloat', 'transform: translateY(', 'animation: patronusFloat', 'prefers-reduced-motion'],
+          starter: '@keyframes patronusFloat {\n  from { transform: translateY(8px); opacity: .6; }\n  to { transform: translateY(-8px); opacity: 1; }\n}\n.patronus-stag {\n  /* Gắn animation */\n}\n@media (prefers-reduced-motion: reduce) {\n  .patronus-stag { animation: none; }\n}',
+          hint: 'Thêm animation: patronusFloat 3s ease-in-out infinite alternate; vào .patronus-stag.',
+          baseCss: '.patronus-stag{display:grid;place-items:center;width:240px;height:180px;border:1px solid #6d826e;border-radius:16px;background:radial-gradient(circle,#dcebdc,#4e6955 35%,#111b14 72%);font-family:Georgia,serif;font-size:2.5rem;color:#eef8ee;text-shadow:0 0 24px #b9d8ba}',
+          previewHtml: '<div class="patronus-stag">P</div>', xp: 80,
+          validator: (css) => normalizeCss(css).includes('@keyframespatronusfloat{') && normalizeCss(css).includes('transform:translatey(') && normalizeCss(css).includes('animation:patronusfloat') && normalizeCss(css).includes('@media(prefers-reduced-motion:reduce)')
+        }
+      }
+    ];
+
+    const achievements = [
+      { id: 'first-light', title: 'Ánh Sáng Đầu Tiên', description: 'Hoàn thành bài tập đầu tiên.', icon: 'spark', earned: () => state.tasks['1-exercise'] },
+      { id: 'potion-master', title: 'Bậc Thầy Độc Dược', description: 'Hoàn thành cả bài tập và dự án chương 3.', icon: 'potion', earned: () => chapterCompleted(3) },
+      { id: 'architect', title: 'Kiến Trúc Sư Bản Đồ', description: 'Hoàn thành chương 6 và làm chủ CSS Grid.', icon: 'grid', earned: () => chapterCompleted(6) },
+      { id: 'seeker', title: 'Người Săn Snitch', description: 'Soi tác dụng của ít nhất 30 dòng code.', icon: 'eye', earned: () => state.inspected.length >= 30 },
+      { id: 'collector', title: 'Nhà Sưu Tầm Bảo Bối', description: 'Hoàn thành 4 chương đầu tiên.', icon: 'medal', earned: () => completedCount() >= 4 },
+      { id: 'grand-wizard', title: 'Đại Phù Thủy Giao Diện', description: 'Hoàn thành trọn 8 chương và 8 dự án.', icon: 'crest', earned: () => completedCount() === 8 }
+    ];
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function chapterCompleted(id) {
+      return Boolean(state.tasks[`${id}-exercise`] && state.tasks[`${id}-project`]);
+    }
+
+    function completedCount() {
+      return chapters.filter((chapter) => chapterCompleted(chapter.id)).length;
+    }
+
+    function nextChapter() {
+      return chapters.find((chapter) => chapter.id <= state.unlocked && !chapterCompleted(chapter.id)) || chapters[state.unlocked - 1];
+    }
+
+    function rankForXp(xp) {
+      if (xp >= 960) return 'Đại phù thủy CSS';
+      if (xp >= 600) return 'Phù thủy bậc cao';
+      if (xp >= 360) return 'Phù thủy tập sự';
+      if (xp >= 120) return 'Học việc ánh sáng';
+      return 'Học viên mới';
+    }
+
+    function chapterArt(chapter) {
+      const column = (chapter.id - 1) % 2;
+      const row = Math.floor((chapter.id - 1) / 2);
+      return `background-position:${column * 100}% ${row * (100 / 3)}%`;
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-text').textContent = message;
+      toast.classList.add('visible');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('visible'), 5200);
+    }
+
+    function switchView(view) {
+      currentView = view;
+      document.querySelectorAll('.view').forEach((element) => { element.hidden = element.id !== `view-${view}`; });
+      document.querySelectorAll('[data-nav]').forEach((button) => button.classList.toggle('active', button.dataset.nav === view));
+      if (view === 'roadmap') renderRoadmap();
+      if (view === 'achievements') renderAchievements();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function updateHUD() {
+      const completed = completedCount();
+      const percent = Math.round((completed / chapters.length) * 100);
+      const next = nextChapter();
+      document.getElementById('hud-exp').textContent = `${state.xp} EXP`;
+      document.getElementById('home-progress-percent').textContent = `${percent}%`;
+      document.getElementById('home-progress-ring').style.setProperty('--progress', `${percent * 3.6}deg`);
+      document.getElementById('home-rank').textContent = rankForXp(state.xp);
+      document.getElementById('home-completed').textContent = `${completed} / ${chapters.length} chương`;
+      document.getElementById('home-artifacts').textContent = `${completed} / ${chapters.length}`;
+      document.getElementById('continue-label').textContent = completed === 8 ? 'Ôn lại chương cuối' : completed === 0 ? `Bắt đầu chương ${next.id}` : `Tiếp tục chương ${next.id}`;
+      document.getElementById('home-next-label').textContent = completed === 8 ? 'Toàn bộ bùa chú đã thức tỉnh' : next.artifact;
+      document.getElementById('roadmap-current').textContent = `Chương ${next.id}`;
+      document.getElementById('roadmap-percent').textContent = `${percent}%`;
+      document.getElementById('roadmap-next-title').textContent = completed === 8 ? 'Hành trình đã hoàn thành' : `Nhiệm vụ tiếp theo: ${next.title}`;
+      document.getElementById('roadmap-next-desc').textContent = completed === 8 ? 'Bạn có thể quay lại bất kỳ chương nào để luyện tập và khám phá cách viết khác.' : next.id < 8 ? `Hoàn thành bài luyện tập và dự án của chương ${next.id} để mở đường tới ${chapters[next.id].title}.` : 'Hoàn thành bài tập và dự án cuối để nhận danh hiệu Đại Phù Thủy Giao Diện.';
+    }
+
+    function renderCatalog() {
+      document.getElementById('chapter-grid').innerHTML = chapters.map((chapter) => {
+        const unlocked = chapter.id <= state.unlocked;
+        const completed = chapterCompleted(chapter.id);
+        const current = chapter.id === nextChapter().id && !completed;
+        const status = completed ? `<span class="chapter-status completed">${icon('check')}Hoàn thành</span>` : current ? `<span class="chapter-status current">${icon('spark')}Đang học</span>` : unlocked ? `<span class="chapter-status">${icon('book')}Đã mở</span>` : `<span class="chapter-status">${icon('lock')}Chưa mở</span>`;
+        return `<article class="chapter-card ${unlocked ? '' : 'locked'} ${current ? 'current' : ''}">
+          <div class="chapter-art" style="${chapterArt(chapter)}" role="img" aria-label="Minh họa ${chapter.artifact}">${status}${!unlocked ? `<span class="lock-seal">${icon('lock')}</span>` : ''}</div>
+          <div class="chapter-body"><span class="chapter-number">CHƯƠNG ${chapter.id}</span><h3>${unlocked ? chapter.title : 'Bí mật chưa khám phá'}</h3><p>${unlocked ? chapter.subtitle : `Hoàn thành chương ${chapter.id - 1} để mở địa điểm này.`}</p><div class="chapter-meta"><span>${icon('clock')}${chapter.time} phút</span><span>${icon('spark')}120 EXP</span></div><button class="button ${unlocked ? 'button-ghost' : ''}" data-action="open-chapter" data-chapter="${chapter.id}" ${unlocked ? '' : 'aria-disabled="true"'}>${completed ? 'Xem lại chương' : unlocked ? 'Vào chương học' : `Mở ở chương ${chapter.id - 1}`}${icon(unlocked ? 'arrow-right' : 'lock')}</button></div>
+        </article>`;
+      }).join('');
+    }
+
+    const mapPositions = [
+      { left: 9.5, top: 72 }, { left: 22.5, top: 61 }, { left: 35, top: 73 }, { left: 46, top: 48 },
+      { left: 56.5, top: 62 }, { left: 67.5, top: 42 }, { left: 79, top: 61 }, { left: 82, top: 26 }
+    ];
+    const mobileMapPositions = [
+      { left: 25, top: 87 }, { left: 72, top: 76 }, { left: 29, top: 63 }, { left: 70, top: 52 },
+      { left: 27, top: 39 }, { left: 72, top: 29 }, { left: 30, top: 16 }, { left: 70, top: 7 }
+    ];
+
+    function renderRoadmap() {
+      const mobile = window.matchMedia('(max-width: 720px)').matches;
+      document.getElementById('map-nodes').innerHTML = chapters.map((chapter, index) => {
+        const position = mobile ? mobileMapPositions[index] : mapPositions[index];
+        const unlocked = chapter.id <= state.unlocked;
+        const completed = chapterCompleted(chapter.id);
+        const current = chapter.id === nextChapter().id && !completed;
+        return `<button class="map-node ${unlocked ? '' : 'locked'} ${completed ? 'completed' : ''} ${current ? 'current' : ''}" style="left:${position.left}%;top:${position.top}%" data-action="open-chapter" data-chapter="${chapter.id}" aria-label="${unlocked ? `Mở chương ${chapter.id}: ${chapter.title}` : `Chương ${chapter.id} đang khóa`}" ${unlocked ? '' : 'aria-disabled="true"'}>
+          ${current ? '<span class="node-here">BẠN Ở ĐÂY</span>' : ''}<span class="node-disc">${icon(unlocked ? chapter.icon : 'lock')}<span class="node-badge">${completed ? icon('check') : unlocked ? chapter.id : icon('lock')}</span></span><span class="node-name">${chapter.id}. ${unlocked ? chapter.title : 'Chưa khám phá'}</span>
+        </button>`;
+      }).join('');
+    }
+
+    function renderLesson(chapter) {
+      currentChapterId = chapter.id;
+      state.currentChapter = chapter.id;
+      saveState();
+      const unlocked = chapter.id <= state.unlocked;
+      const exerciseDone = Boolean(state.tasks[`${chapter.id}-exercise`]);
+      const projectDone = Boolean(state.tasks[`${chapter.id}-project`]);
+      const previous = chapters[chapter.id - 2];
+      const following = chapters[chapter.id];
+      const nextUnlocked = following && following.id <= state.unlocked;
+      document.getElementById('view-lesson').innerHTML = `
+        <div class="lesson-breadcrumb"><div class="breadcrumb-left"><button data-action="view" data-view="home">${icon('arrow-left')}Thư viện chương</button><span>/</span><span>Chương ${chapter.id} · ${chapter.location}</span></div><div class="lesson-nav"><button class="button button-ghost button-small" data-action="step" data-step="-1" ${previous && previous.id <= state.unlocked ? '' : 'disabled'}>${icon('arrow-left')}Chương trước</button><button class="button button-ghost button-small" data-action="step" data-step="1" ${nextUnlocked ? '' : 'disabled'}>Chương sau${icon('arrow-right')}</button></div></div>
+        <div class="lesson-layout"><aside class="lesson-sidebar"><h2 class="sidebar-title">Mục lục bài giảng</h2><nav class="sidebar-nav"><a href="#chapter-goals">Mục tiêu chương</a><a href="#chapter-inspector">Bàn soi từng dòng code</a><a href="#chapter-theory">Lý thuyết tổng kết</a><a href="#chapter-exercise">Bài tập luyện tập</a><a href="#chapter-project">Dự án mở khóa</a></nav><div class="sidebar-progress"><div class="sidebar-progress-label"><span>Tiến độ chương</span><span id="sidebar-progress-text">${Number(exerciseDone) + Number(projectDone)} / 2</span></div><div class="mini-progress"><span id="sidebar-progress-bar" style="width:${(Number(exerciseDone) + Number(projectDone)) * 50}%"></span></div><div class="sidebar-task ${exerciseDone ? 'done' : ''}" id="sidebar-exercise">${icon(exerciseDone ? 'check' : 'target')}Bài tập luyện tập</div><div class="sidebar-task ${projectDone ? 'done' : ''}" id="sidebar-project">${icon(projectDone ? 'check' : 'code')}Dự án cuối chương</div></div></aside>
+          <article class="lesson-article">
+            <header class="lesson-hero"><div class="lesson-hero-art" style="${chapterArt(chapter)}"></div><div class="lesson-hero-copy"><div class="eyebrow">Chương ${chapter.id} · ${chapter.location}</div><h1>${chapter.title}</h1><p>${chapter.subtitle}</p><div class="lesson-meta-row"><span>${icon('clock')}${chapter.time} phút đọc</span><span>${icon('spark')}120 EXP</span><span>${icon('book')}${chapter.recap.length} ý tưởng then chốt</span><span>${icon('code')}1 bài tập + 1 dự án</span></div></div></header>
+            <section class="lesson-block objectives-block" id="chapter-goals"><div class="block-kicker">Đích đến của hành trình</div><h2>Mục tiêu cần đạt trong chương này</h2><ul class="objective-list">${chapter.objectives.map((objective) => `<li>${icon('target')}<span>${objective}</span></li>`).join('')}</ul></section>
+            <section class="lesson-block story-block" id="chapter-story"><div class="block-kicker">Câu chuyện dẫn đường</div><p class="story-line">${chapter.story}</p></section>
+            ${renderInspector(chapter)}
+            ${renderTheorySummary(chapter)}
+            ${renderTask(chapter, 'exercise')}
+            ${renderTask(chapter, 'project')}
+            <section class="chapter-finish" id="chapter-finish" ${chapterCompleted(chapter.id) ? '' : 'hidden'}><div class="finish-seal">${icon('crest')}</div><h2>${chapter.id === 8 ? 'Bạn đã trở thành Đại Phù Thủy Giao Diện' : 'Chương đã hoàn thành — lối đi mới đã mở'}</h2><p>${chapter.id === 8 ? 'Cả tám bảo bối đã được khắc tên. Hãy quay lại Thành tích để xem danh hiệu của bạn.' : `Bạn đã hoàn thành cả bài tập và dự án. Chương ${chapter.id + 1}: ${following.title} đã sẵn sàng.`}</p>${chapter.id < 8 ? `<button class="button button-primary" data-action="open-chapter" data-chapter="${chapter.id + 1}" ${nextUnlocked ? '' : 'disabled'}>Mở chương ${chapter.id + 1}${icon('arrow-right')}</button>` : '<button class="button button-primary" data-action="view" data-view="achievements">Xem thành tích' + icon('trophy') + '</button>'}</section>
+          </article>
+        </div>`;
+      initializeInspector(chapter);
+      initializeTask(chapter, 'exercise');
+      initializeTask(chapter, 'project');
+    }
+
+    function renderTheorySummary(chapter) {
+      return `<section class="lesson-block" id="chapter-theory"><div class="block-kicker">Sổ tay phù thủy</div><h2>Lý thuyết cần nhớ trước khi thực hành</h2><p>Sau khi quan sát từng dòng code, hãy chốt lại bốn ý tưởng dưới đây. Phần chi tiết về thẻ HTML và thuộc tính được gọn bên dưới để bạn tra cứu khi cần.</p><div class="recap-grid">${chapter.recap.map((item, index) => `<div class="recap-item"><span class="recap-number">${index + 1}</span><span>${item}</span></div>`).join('')}</div><div class="pitfall-note"><strong>Lỗi thường gặp:</strong> ${chapter.pitfall}</div><details class="theory-details"><summary>Xem đầy đủ lý thuyết, tác dụng thẻ HTML và thuộc tính CSS</summary>${chapter.theory.map((section) => `<div class="theory-section"><h3>${section.title}</h3>${section.html}</div>`).join('')}<div class="reference-title">${icon('book')}Thẻ HTML xuất hiện trong bài</div><table class="reference-table"><thead><tr><th>Thẻ</th><th>Tác dụng</th></tr></thead><tbody>${chapter.tags.map((item) => `<tr><td><code>${escapeHtml(item.tag)}</code></td><td>${item.effect}</td></tr>`).join('')}</tbody></table><div class="reference-title">${icon('code')}Thuộc tính CSS cần nhớ</div><table class="reference-table"><thead><tr><th>Thuộc tính</th><th>Tác dụng</th></tr></thead><tbody>${chapter.properties.map((item) => `<tr><td><code>${escapeHtml(item.name)}</code></td><td>${item.effect}</td></tr>`).join('')}</tbody></table></details></section>`;
+    }
+
+    function colorizeValue(value) {
+      const pattern = /(#[0-9a-fA-F]{3,8}\b|(?:\d+(?:\.\d+)?|\.\d+)(?:px|rem|em|%|s|ms|fr|deg|vh|vw)?\b|[a-zA-Z-]+\([^)]*\)|"[^"]*"|'[^']*')/g;
+      let html = '';
+      let cursor = 0;
+      for (const match of value.matchAll(pattern)) {
+        html += escapeHtml(value.slice(cursor, match.index));
+        const token = match[0];
+        const className = /^#|^(?:\d|\.\d)/.test(token) ? 'token-number' : token.includes('(') ? 'token-function' : /^["']/.test(token) ? 'token-string' : 'token-value';
+        html += `<span class="${className}">${escapeHtml(token)}</span>`;
+        cursor = match.index + token.length;
+      }
+      return html + escapeHtml(value.slice(cursor));
+    }
+
+    function formatCodeLine(code) {
+      const indent = code.match(/^\s*/)[0];
+      const body = code.trim();
+      if (!body) return { html: '&nbsp;', tone: '#8b9c91' };
+      if (body.startsWith('/*')) return { html: `${indent}<span class="token-comment">${escapeHtml(body)}</span>`, tone: '#8b9c91' };
+      if (/^@(keyframes|media)/.test(body)) return { html: `${indent}<span class="token-atrule">${escapeHtml(body)}</span>`, tone: '#df96c2' };
+      const keyframe = body.match(/^(from|to|\d+%)\s*\{\s*([a-zA-Z-]+)\s*:\s*([\s\S]+?)\s*;?\s*\}$/);
+      if (keyframe) {
+        return { html: `${indent}<span class="token-punctuation">${escapeHtml(keyframe[1])} { </span><span class="token-property">${escapeHtml(keyframe[2])}</span><span class="token-punctuation">: </span>${colorizeValue(keyframe[3])}<span class="token-punctuation">; }</span>`, tone: '#8b9c91' };
+      }
+      const declaration = body.match(/^([a-zA-Z-]+)(\s*:\s*)([\s\S]+?)(;?)$/);
+      if (declaration && !body.includes('{')) {
+        const numeric = /^#|^(?:\d|\.\d)/.test(declaration[3].trim());
+        return { html: `${indent}<span class="token-property">${escapeHtml(declaration[1])}</span><span class="token-punctuation">${escapeHtml(declaration[2])}</span>${colorizeValue(declaration[3])}<span class="token-punctuation">${escapeHtml(declaration[4])}</span>`, tone: numeric ? '#efa58d' : '#b8a7e8' };
+      }
+      if (body.endsWith('{')) return { html: `${indent}<span class="token-selector">${escapeHtml(body)}</span>`, tone: '#83c9be' };
+      if (body === '}') return { html: `${indent}<span class="token-punctuation">}</span>`, tone: '#8b9c91' };
+      return { html: `${indent}<span class="token-value">${escapeHtml(body)}</span>`, tone: '#b8a7e8' };
+    }
+
+    function renderInspector(chapter) {
+      return `<section class="lesson-block" id="chapter-inspector"><div class="block-kicker">Học bằng quan sát</div><h2>Bàn soi phép thuật từng dòng code</h2><p>Di chuột, chạm hoặc dùng phím Tab để chọn từng dòng. Mỗi dòng có màu nhận diện riêng; phần bên phải sẽ áp dụng dần các khai báo và giải thích đúng tác dụng của dòng đang xem.</p><div class="inspector-grid"><div class="code-window"><div class="window-bar"><span class="window-dots"><i></i><i></i><i></i></span><strong>${chapter.inspector.filename}</strong><span id="inspector-counter">0 / ${chapter.inspector.lines.length}</span></div><div class="code-lines" id="inspector-lines">${chapter.inspector.lines.map((line, index) => { const formatted = formatCodeLine(line.code); return `<button class="code-line" data-line="${index}" style="--line-accent:${formatted.tone}" aria-label="Xem tác dụng dòng ${index + 1}"><span class="line-number">${index + 1}</span><code>${formatted.html}</code></button>`; }).join('')}</div></div><div class="preview-window"><div class="window-bar"><strong>Kết quả trực tiếp</strong><span>Vùng xem an toàn</span></div><iframe class="preview-frame" id="inspector-frame" title="Kết quả CSS của dòng code đang chọn" sandbox=""></iframe><div class="line-explanation" id="inspector-explanation">${icon('eye')}<span>Chọn một dòng code để bắt đầu soi tác dụng.</span></div></div></div><div class="inspector-help"><span>${icon('code')}Mã được áp dụng dần, không chỉ đổi màu viền.</span><button class="button button-ghost button-small" data-action="inspect-all">Xem toàn bộ hiệu ứng${icon('arrow-right')}</button></div></section>`;
+    }
+
+    function previewDocument(html, baseCss, userCss = '') {
+      const safeCss = `${baseCss}\n${userCss}`.replace(/</g, '\\3c ');
+      // Không đóng thẻ body trong chuỗi để Live Server không chèn mã vào đây.
+      return `<!doctype html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#0d1711;color:#eee8da;font-family:system-ui,sans-serif}body{min-height:100vh;display:grid;place-items:center;padding:24px;overflow:auto}button,a{font:inherit}${safeCss}</style></head><body>${html}`;
+    }
+
+    function initializeInspector(chapter) {
+      const frame = document.getElementById('inspector-frame');
+      const explanation = document.getElementById('inspector-explanation');
+      const counter = document.getElementById('inspector-counter');
+      frame.srcdoc = previewDocument(chapter.inspector.targetHtml, chapter.inspector.baseCss);
+      document.querySelectorAll('#inspector-lines .code-line').forEach((button) => {
+        button.addEventListener('mouseenter', () => inspectLine(Number(button.dataset.line)));
+        button.addEventListener('focus', () => inspectLine(Number(button.dataset.line)));
+        button.addEventListener('click', () => inspectLine(Number(button.dataset.line)));
+      });
+      function inspectLine(index) {
+        const lines = chapter.inspector.lines;
+        const selected = lines[index];
+        const css = lines.slice(0, index + 1).map((line) => line.apply).filter(Boolean).join('\n');
+        frame.srcdoc = previewDocument(chapter.inspector.targetHtml, chapter.inspector.baseCss, css);
+        document.querySelectorAll('#inspector-lines .code-line').forEach((line) => line.classList.toggle('active', Number(line.dataset.line) === index));
+        counter.textContent = `${index + 1} / ${lines.length}`;
+        explanation.innerHTML = `${icon('spark')}<span><strong>Dòng ${index + 1}:</strong> ${escapeHtml(selected.desc)}</span>`;
+        const key = `${chapter.id}-${index}`;
+        if (!state.inspected.includes(key)) {
+          state.inspected.push(key);
+          saveState();
+        }
+      }
+      window.__inspectChapterLine = inspectLine;
+    }
+
+    function renderTask(chapter, type) {
+      const task = chapter[type];
+      const done = Boolean(state.tasks[`${chapter.id}-${type}`]);
+      const label = type === 'exercise' ? 'Luyện thần chú' : 'Dự án mở khóa';
+      return `<section class="lesson-block" id="chapter-${type}"><div class="block-kicker">${label}</div><h2>${type === 'exercise' ? 'Bài tập thực hành' : 'Dự án cuối chương'}</h2><div class="task-card ${done ? 'completed' : ''}" id="task-${type}"><div class="task-heading"><div><span class="block-kicker">${label}</span><h3>${task.title}</h3><p>${task.brief}</p></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px"><span class="task-xp">${icon('spark')}+${task.xp} EXP</span><span class="task-status ${done ? 'done' : ''}">${icon(done ? 'check' : 'clock')}${done ? 'Đã hoàn thành' : 'Chưa hoàn thành'}</span></div></div><ul class="requirements">${task.requirements.map((requirement) => `<li>${requirement}</li>`).join('')}</ul><div class="editor-grid"><div class="editor-window"><div class="window-bar"><strong>${type === 'exercise' ? 'practice' : 'project'}-${chapter.id}.css</strong><span>CSS</span></div><div class="editor-body"><div class="editor-gutter" id="gutter-${type}">1</div><textarea class="code-input" id="input-${type}" spellcheck="false" aria-label="Trình soạn thảo ${task.title}"></textarea></div></div><div class="task-preview"><div class="window-bar"><strong>Kết quả trực tiếp</strong><span>${label}</span></div><iframe class="preview-frame" id="frame-${type}" title="Kết quả ${task.title}" sandbox=""></iframe><div class="editor-line-info" id="line-info-${type}">Rê chuột trên một dòng để xem tác dụng từng phần.</div></div></div><div class="task-actions"><div class="task-actions-left"><button class="button button-ghost button-small" data-action="hint" data-task="${type}">${icon('hint')}Gợi ý</button><button class="button button-ghost button-small" data-action="reset-task" data-task="${type}">${icon('reset')}Khôi phục</button></div><button class="button button-primary" data-action="verify" data-task="${type}">${icon('check')}${done ? 'Kiểm tra lại' : 'Kiểm định bùa chú'}</button></div><div class="hint-box" id="hint-${type}" hidden>${task.hint}</div><div class="task-feedback" id="feedback-${type}" role="status" aria-live="polite" hidden></div></div></section>`;
+    }
+
+    function balanceCss(css) {
+      const opens = (css.match(/\{/g) || []).length;
+      const closes = (css.match(/\}/g) || []).length;
+      return css + '\n}'.repeat(Math.max(0, opens - closes));
+    }
+
+    function describeLine(line) {
+      const match = line.trim().match(/^([a-zA-Z-]+)\s*:\s*(.+?);?$/);
+      if (!match) {
+        if (line.includes('@keyframes') || line.includes('{') || line.includes('}')) return 'Dòng cấu trúc mở khối, đóng khối hoặc định nghĩa kịch bản hoạt ảnh.';
+        return 'Dòng này đang được áp dụng vào vùng kết quả bên phải.';
+      }
+      const property = match[1].toLowerCase();
+      const value = match[2].replace(/;$/, '').trim();
+      const descriptions = {
+        color: 'Đổi màu chữ của phần tử.', 'background-color': 'Đổi màu nền.', background: 'Đổi lớp nền của phần tử.',
+        border: 'Thêm hoặc thay đổi khung viền.', 'border-radius': 'Bo các góc của hộp.', padding: 'Tạo khoảng đệm bên trong viền.',
+        margin: 'Tạo khoảng cách bên ngoài hộp.', width: 'Đặt chiều rộng.', 'max-width': 'Giới hạn chiều rộng tối đa.',
+        'box-sizing': 'Thay đổi cách tính kích thước tổng.', opacity: 'Điều chỉnh độ mờ của toàn bộ phần tử.',
+        'box-shadow': 'Thêm bóng đổ tạo chiều sâu.', display: 'Thay đổi kiểu hiển thị và bố cục.',
+        'justify-content': 'Phân bổ các item trên trục chính.', 'align-items': 'Căn các item trên trục phụ.',
+        gap: 'Tạo khoảng cách giữa các item.', 'grid-template-columns': 'Định nghĩa các cột của lưới.',
+        'grid-template-areas': 'Vẽ vùng bố cục bằng tên.', position: 'Chọn phương thức định vị phần tử.',
+        top: 'Đặt khoảng cách từ mép trên.', right: 'Đặt khoảng cách từ mép phải.', 'z-index': 'Thay đổi thứ tự lớp xếp chồng.',
+        transform: 'Biến đổi hình học phần tử.', animation: 'Gắn một hoạt ảnh đã định nghĩa.',
+        transition: 'Tạo chuyển tiếp giữa các trạng thái.', outline: 'Hiển thị đường viền ngoài phần tử, thường dùng cho focus.'
+      };
+      return `${property} đang đặt giá trị ${value}. ${descriptions[property] || 'Thuộc tính này định hình phần tử trong kết quả.'}`;
+    }
+
+    function initializeTask(chapter, type) {
+      const task = chapter[type];
+      const input = document.getElementById(`input-${type}`);
+      const frame = document.getElementById(`frame-${type}`);
+      const gutter = document.getElementById(`gutter-${type}`);
+      const lineInfo = document.getElementById(`line-info-${type}`);
+      const draftKey = `${chapter.id}-${type}`;
+      let lastPreviewLine = null;
+      input.value = Object.prototype.hasOwnProperty.call(state.drafts, draftKey) ? state.drafts[draftKey] : task.starter;
+
+      const syncGutter = () => {
+        const lines = input.value.split('\n').length;
+        gutter.textContent = Array.from({ length: lines }, (_, index) => index + 1).join('\n');
+        gutter.scrollTop = input.scrollTop;
+      };
+      const applyPreview = (lineIndex = null) => {
+        const fullCode = input.value;
+        const code = lineIndex === null ? fullCode : balanceCss(fullCode.split('\n').slice(0, lineIndex + 1).join('\n'));
+        frame.srcdoc = previewDocument(task.previewHtml, task.baseCss, code);
+        if (lineIndex !== null) {
+          const line = fullCode.split('\n')[lineIndex] || '';
+          lineInfo.textContent = `Dòng ${lineIndex + 1}: ${describeLine(line)}`;
+        } else {
+          lineInfo.textContent = 'Rê chuột trên một dòng để xem tác dụng từng phần.';
+        }
+      };
+      input.addEventListener('input', () => {
+        state.drafts[draftKey] = input.value;
+        saveState();
+        syncGutter();
+        clearTimeout(previewTimer);
+        previewTimer = setTimeout(() => applyPreview(), 120);
+      });
+      input.addEventListener('scroll', () => { gutter.scrollTop = input.scrollTop; });
+      input.addEventListener('click', (event) => {
+        const bounds = input.getBoundingClientRect();
+        const lineHeight = parseFloat(getComputedStyle(input).lineHeight);
+        const index = Math.max(0, Math.min(input.value.split('\n').length - 1, Math.floor((event.clientY - bounds.top + input.scrollTop) / lineHeight)));
+        applyPreview(index);
+      });
+      input.addEventListener('mousemove', (event) => {
+        const bounds = input.getBoundingClientRect();
+        const lineHeight = parseFloat(getComputedStyle(input).lineHeight);
+        const index = Math.max(0, Math.min(input.value.split('\n').length - 1, Math.floor((event.clientY - bounds.top + input.scrollTop) / lineHeight)));
+        if (index === lastPreviewLine) return;
+        lastPreviewLine = index;
+        applyPreview(index);
+      });
+      input.addEventListener('mouseleave', () => applyPreview());
+      input.addEventListener('keydown', (event) => {
+        if (event.key === 'Tab') {
+          event.preventDefault();
+          const start = input.selectionStart;
+          const end = input.selectionEnd;
+          input.setRangeText('  ', start, end, 'end');
+          input.dispatchEvent(new Event('input'));
+        }
+      });
+      syncGutter();
+      applyPreview();
+      window[`__applyPreview_${type}`] = applyPreview;
+    }
+
+    function verifyTask(chapter, type) {
+      const task = chapter[type];
+      const input = document.getElementById(`input-${type}`);
+      const feedback = document.getElementById(`feedback-${type}`);
+      const valid = task.validator(input.value);
+      feedback.hidden = false;
+      if (!valid) {
+        feedback.className = 'task-feedback error';
+        feedback.textContent = `Chưa đạt yêu cầu. Hãy kiểm tra lại ${task.requirements.join(', ')}. Bạn có thể mở Gợi ý để xem cách hoàn thiện.`;
+        return;
+      }
+      const key = `${chapter.id}-${type}`;
+      const wasCompleted = chapterCompleted(chapter.id);
+      const firstCompletion = !state.tasks[key];
+      state.tasks[key] = true;
+      if (firstCompletion) state.xp += task.xp;
+      saveState();
+      updateHUD();
+      const taskCard = document.getElementById(`task-${type}`);
+      taskCard.classList.add('completed');
+      const status = taskCard.querySelector('.task-status');
+      status.className = 'task-status done';
+      status.innerHTML = `${icon('check')}Đã hoàn thành`;
+      const verifyButton = taskCard.querySelector('[data-action="verify"]');
+      verifyButton.innerHTML = `${icon('check')}Kiểm tra lại`;
+      feedback.className = 'task-feedback success';
+      feedback.textContent = firstCompletion ? `Hoàn thành ${type === 'exercise' ? 'bài tập' : 'dự án'}! Bạn nhận được ${task.xp} EXP.` : 'Kết quả vẫn đạt yêu cầu. Bài này đã hoàn thành trước đó nên không cộng thêm EXP.';
+
+      const doneCount = Number(Boolean(state.tasks[`${chapter.id}-exercise`])) + Number(Boolean(state.tasks[`${chapter.id}-project`]));
+      document.getElementById('sidebar-progress-text').textContent = `${doneCount} / 2`;
+      document.getElementById('sidebar-progress-bar').style.width = `${doneCount * 50}%`;
+      const sidebar = document.getElementById(`sidebar-${type}`);
+      sidebar.classList.add('done');
+      sidebar.innerHTML = `${icon('check')}${type === 'exercise' ? 'Bài tập luyện tập' : 'Dự án cuối chương'}`;
+
+      if (doneCount === 2 && !wasCompleted) {
+        if (chapter.id < 8) {
+          state.unlocked = Math.max(state.unlocked, chapter.id + 1);
+          saveState();
+          updateHUD();
+          document.getElementById('chapter-finish').hidden = false;
+          document.querySelector('[data-action="step"][data-step="1"]').disabled = false;
+          document.querySelector('#chapter-finish [data-action="open-chapter"]').disabled = false;
+          showToast(`Chương ${chapter.id} hoàn thành. Chương ${chapter.id + 1}: ${chapters[chapter.id].title} đã được mở khóa!`);
+        } else {
+          saveState();
+          updateHUD();
+          document.getElementById('chapter-finish').hidden = false;
+          showToast('Chúc mừng! Bạn đã hoàn thành toàn bộ hành trình Hogwarts CSS.');
+        }
+      } else if (doneCount === 2) {
+        showToast(chapter.id === 8 ? 'Bạn đã hoàn thành toàn bộ hành trình Hogwarts CSS.' : `Chương ${chapter.id} đã hoàn thành từ trước.`);
+      } else {
+        showToast(type === 'exercise' ? 'Bài tập đã đạt. Hãy hoàn thành dự án cuối chương để mở lối đi tiếp theo.' : 'Dự án đã đạt. Hãy hoàn thành bài tập luyện tập để mở lối đi tiếp theo.');
+      }
+      renderCatalog();
+    }
+
+    function renderAchievements() {
+      const completed = completedCount();
+      const earned = achievements.filter((achievement) => achievement.earned()).length;
+      document.getElementById('achievement-summary').innerHTML = `<div class="summary-card featured"><span>Cấp bậc hiện tại</span><strong>${rankForXp(state.xp)}</strong><p>${state.xp} / 960 EXP tối đa từ bài tập và dự án</p></div><div class="summary-card"><span>Chương hoàn thành</span><strong>${completed} / 8</strong><p>Mỗi chương cần 2 nhiệm vụ</p></div><div class="summary-card"><span>Danh hiệu</span><strong>${earned} / ${achievements.length}</strong><p>Khám phá để mở thêm</p></div><div class="summary-card"><span>Dòng code đã soi</span><strong>${state.inspected.length}</strong><p>Học bằng quan sát tác dụng</p></div>`;
+      document.getElementById('achievement-grid').innerHTML = achievements.map((achievement) => {
+        const unlocked = achievement.earned();
+        return `<article class="achievement-card ${unlocked ? 'earned' : ''}"><div class="achievement-icon">${icon(achievement.icon)}</div><h3>${achievement.title}</h3><p>${achievement.description}</p><span class="achievement-state">${icon(unlocked ? 'check' : 'lock')}${unlocked ? 'Đã vinh danh' : 'Chưa mở khóa'}</span></article>`;
+      }).join('');
+    }
+
+    function openChapter(id) {
+      if (id < 1 || id > 8) return;
+      if (id > state.unlocked) {
+        showToast(`Chương ${id} đang khóa. Hoàn thành cả bài tập và dự án chương ${id - 1} để mở khóa.`);
+        return;
+      }
+      renderLesson(chapters[id - 1]);
+      switchView('lesson');
+    }
+
+    function stepChapter(direction) {
+      openChapter(currentChapterId + direction);
+    }
+
+    function continueJourney() {
+      openChapter(completedCount() === 8 ? state.currentChapter || 8 : nextChapter().id);
+    }
+
+    function toggleFocus() {
+      state.focus = !state.focus;
+      document.body.classList.toggle('focus-mode', state.focus);
+      const button = document.getElementById('focus-button');
+      button.classList.toggle('active', state.focus);
+      button.setAttribute('aria-pressed', String(state.focus));
+      button.title = state.focus ? 'Thoát chế độ tập trung' : 'Bật chế độ tập trung';
+      saveState();
+      showToast(state.focus ? 'Đã bật chế độ tập trung: ẩn mục lục phụ, thu gọn điều hướng và giảm hiệu ứng trang trí.' : 'Đã thoát chế độ tập trung.');
+    }
+
+    const musicTracks = {
+      local: { label: 'nhạc phù thủy chill', title: 'Ways of the Wizard — Geoff Harvey' },
+      youtube: { label: 'nhạc Harry Potter — Prologue', title: 'Prologue — John Williams · MP4 cục bộ' }
+    };
+
+    const MusicPlayer = {
+      audio: null,
+      movie: null,
+      source: state.musicSource,
+      volume: 0.28,
+      toggling: false,
+      init() {
+        if (this.audio) return;
+        this.audio = document.getElementById('bg-music');
+        this.movie = document.getElementById('harry-potter-music');
+        this.audio.volume = this.volume;
+        this.movie.volume = this.volume;
+        this.audio.addEventListener('error', () => showToast('Không tải được tệp nhạc. Hãy kiểm tra assets/hogwarts-chill.mp3.'));
+        this.movie.addEventListener('error', () => showToast('Không tải được nhạc Harry Potter. Hãy kiểm tra assets/hogwarts-prologue.mp4.'));
+        document.getElementById('music-source').value = this.source;
+      },
+      currentMedia() {
+        return this.source === 'local' ? this.audio : this.movie;
+      },
+      isPlaying() {
+        const media = this.currentMedia();
+        return Boolean(media && !media.paused && !media.ended);
+      },
+      pauseCurrent() {
+        this.currentMedia()?.pause();
+      },
+      syncControls() {
+        const playing = this.isPlaying();
+        const track = musicTracks[this.source];
+        const button = document.getElementById('music-button');
+        button.classList.toggle('playing', playing);
+        button.setAttribute('aria-pressed', String(playing));
+        button.setAttribute('aria-label', `${playing ? 'Tạm dừng' : 'Phát'} ${track.label}`);
+        button.title = `${playing ? 'Tạm dừng' : 'Phát'} ${track.title}`;
+        document.getElementById('music-label').textContent = playing ? 'Đang phát' : 'Nhạc';
+        document.getElementById('volume-control').classList.toggle('visible', playing);
+      },
+      async play() {
+        await this.currentMedia().play();
+      },
+      async toggle() {
+        if (this.toggling) return;
+        this.init();
+        this.toggling = true;
+        try {
+          if (this.isPlaying()) this.pauseCurrent();
+          else await this.play();
+        } catch (error) {
+          showToast(error.name === 'NotAllowedError'
+            ? 'Trình duyệt chưa cho phát nhạc. Hãy bấm lại nút Nhạc.'
+            : this.source === 'youtube'
+              ? 'Không phát được nhạc Harry Potter. Hãy kiểm tra assets/hogwarts-prologue.mp4.'
+              : 'Không phát được nhạc. Hãy kiểm tra assets/hogwarts-chill.mp3.');
+        } finally {
+          this.toggling = false;
+          this.syncControls();
+        }
+      },
+      async setSource(source, autoplay = false) {
+        if (!musicTracks[source] || source === this.source) return;
+        this.init();
+        const shouldPlay = autoplay || this.isPlaying();
+        this.pauseCurrent();
+        this.source = source;
+        state.musicSource = source;
+        document.getElementById('music-source').value = source;
+        saveState();
+        this.syncControls();
+        if (shouldPlay) {
+          try {
+            await this.play();
+          } catch (error) {
+            showToast('Đã chuyển nguồn nhạc, nhưng chưa phát được. Hãy kiểm tra tệp nhạc rồi bấm nút Nhạc.');
+          } finally {
+            this.syncControls();
+          }
+        }
+      },
+      setVolume(value) {
+        this.volume = Math.max(0, Math.min(1, Number(value)));
+        if (this.audio) this.audio.volume = this.volume;
+        if (this.movie) this.movie.volume = this.volume;
+      }
+    };
+
+    document.addEventListener('click', (event) => {
+      const button = event.target.closest('[data-action]');
+      if (!button) return;
+      const action = button.dataset.action;
+      if (action === 'view') switchView(button.dataset.view);
+      if (action === 'open-chapter') openChapter(Number(button.dataset.chapter));
+      if (action === 'step') stepChapter(Number(button.dataset.step));
+      if (action === 'continue') continueJourney();
+      if (action === 'focus') toggleFocus();
+      if (action === 'music') MusicPlayer.toggle();
+      if (action === 'close-toast') document.getElementById('toast').classList.remove('visible');
+      if (action === 'inspect-all' && window.__inspectChapterLine) window.__inspectChapterLine(chapters[currentChapterId - 1].inspector.lines.length - 1);
+      if (['verify', 'hint', 'reset-task'].includes(action)) {
+        const type = button.dataset.task;
+        if (action === 'verify') verifyTask(chapters[currentChapterId - 1], type);
+        if (action === 'hint') document.getElementById(`hint-${type}`).hidden = !document.getElementById(`hint-${type}`).hidden;
+        if (action === 'reset-task') {
+          const chapter = chapters[currentChapterId - 1];
+          const task = chapter[type];
+          const input = document.getElementById(`input-${type}`);
+          input.value = task.starter;
+          state.drafts[`${chapter.id}-${type}`] = task.starter;
+          saveState();
+          input.dispatchEvent(new Event('input'));
+          document.getElementById(`feedback-${type}`).hidden = true;
+          showToast('Đã khôi phục mã ban đầu của nhiệm vụ.');
+        }
+      }
+      if (action === 'open-reset') document.getElementById('reset-dialog').showModal();
+      if (action === 'close-reset') document.getElementById('reset-dialog').close();
+      if (action === 'confirm-reset') {
+        localStorage.removeItem(STORAGE_KEY);
+        state = { ...defaultState(), musicSource: MusicPlayer.source };
+        document.body.classList.remove('focus-mode');
+        document.getElementById('focus-button').classList.remove('active');
+        document.getElementById('focus-button').setAttribute('aria-pressed', 'false');
+        document.getElementById('reset-dialog').close();
+        updateHUD();
+        renderCatalog();
+        switchView('home');
+        showToast('Tiến độ đã được đặt lại. Hành trình mới bắt đầu từ chương 1.');
+      }
+    });
+
+    document.getElementById('music-source').addEventListener('change', (event) => MusicPlayer.setSource(event.target.value, MusicPlayer.isPlaying()));
+    document.getElementById('music-volume').addEventListener('input', (event) => MusicPlayer.setVolume(event.target.value / 100));
+    window.addEventListener('resize', () => { if (currentView === 'roadmap') renderRoadmap(); });
+    window.addEventListener('hashchange', () => {
+      const match = location.hash.match(/^#chuong-(\d+)$/);
+      if (match) openChapter(Number(match[1]));
+    });
+
+    function initialize() {
+      MusicPlayer.init();
+      MusicPlayer.syncControls();
+      renderCatalog();
+      updateHUD();
+      document.body.classList.toggle('focus-mode', Boolean(state.focus));
+      document.getElementById('focus-button').classList.toggle('active', Boolean(state.focus));
+      document.getElementById('focus-button').setAttribute('aria-pressed', String(Boolean(state.focus)));
+      const hashMatch = location.hash.match(/^#chuong-(\d+)$/);
+      if (hashMatch) openChapter(Number(hashMatch[1]));
+      else switchView('home');
+    }
+
+    initialize();
+  </script>
+</body>
+</html>
