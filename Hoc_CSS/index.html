@@ -155,7 +155,8 @@
       font-weight: 700;
     }
     .xp-pill .icon { width: 16px; height: 16px; color: var(--gold); }
-    .icon-button, .music-button {
+    .icon-button {
+      width: 39px;
       height: 39px;
       border: 1px solid var(--line);
       border-radius: 999px;
@@ -164,33 +165,80 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
       transition: 160ms ease;
     }
-    .icon-button { width: 39px; padding: 0; }
-    .music-button { padding: 0 13px; font-size: 0.84rem; font-weight: 600; }
-    .icon-button:hover, .music-button:hover { color: var(--gold-light); border-color: var(--line-strong); }
-    .music-button.playing, .icon-button.active { color: var(--gold-light); border-color: var(--line-strong); background: #203126; }
-    .music-source { display: inline-flex; align-items: center; }
-    .music-source select {
-      width: 154px;
-      height: 39px;
-      padding: 0 28px 0 11px;
+    .icon-button:hover, .icon-button.active { color: var(--gold-light); border-color: var(--line-strong); }
+    .icon-button.active { background: #203126; }
+    .music-player {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      padding: 4px;
       border: 1px solid var(--line);
       border-radius: 999px;
-      background: var(--panel);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent), var(--panel);
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0.04);
+    }
+    .music-source { display: inline-flex; align-items: center; gap: 5px; padding-left: 8px; }
+    .music-source .icon { width: 15px; height: 15px; color: var(--gold); flex: 0 0 auto; }
+    .music-source select {
+      width: 142px;
+      height: 31px;
+      padding: 0 4px 0 0;
+      border: 0;
+      border-radius: 999px;
+      outline: none;
+      background: transparent;
       color: var(--muted);
       font: inherit;
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       font-weight: 600;
       cursor: pointer;
     }
-    .music-source select:hover { color: var(--gold-light); border-color: var(--line-strong); }
+    .music-source select:hover, .music-source select:focus-visible { color: var(--gold-light); }
+    .music-source select:focus-visible { box-shadow: 0 0 0 2px rgba(203, 168, 91, 0.3); }
     .music-source option { background: #132019; color: var(--text); }
-    #harry-potter-music { position: fixed; left: -10000px; bottom: 0; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
-    .volume-control { display: none; align-items: center; gap: 7px; padding: 0 8px; }
+    .music-button {
+      height: 31px;
+      padding: 0 10px;
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--muted);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 160ms ease;
+    }
+    .music-button:hover { color: var(--gold-light); background: rgba(255, 255, 255, 0.045); }
+    .music-button.playing { color: var(--gold-light); background: rgba(203, 168, 91, 0.14); }
+    .music-button-icon { position: relative; display: inline-flex; }
+    .music-button-icon .icon { width: 16px; height: 16px; }
+    .music-status-dot {
+      position: absolute;
+      right: -3px;
+      bottom: -1px;
+      width: 5px;
+      height: 5px;
+      border: 1px solid var(--panel);
+      border-radius: 50%;
+      background: var(--gold-light);
+      opacity: 0;
+      transform: scale(0.6);
+      transition: 160ms ease;
+    }
+    .music-button.playing .music-status-dot { opacity: 1; transform: scale(1); }
+    .music-button.playing .music-button-icon .icon { animation: music-pulse 1.8s ease-in-out infinite; }
+    @keyframes music-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.12); } }
+    #harry-potter-music { display: none; }
+    .volume-control { display: none; align-items: center; gap: 5px; padding: 0 6px; color: var(--gold); }
     .volume-control.visible { display: flex; }
-    .volume-control input { width: 70px; accent-color: var(--gold); }
+    .volume-control .icon { width: 14px; height: 14px; }
+    .volume-control input { width: 54px; accent-color: var(--gold); cursor: pointer; }
 
     main { width: min(1400px, 100%); margin: 0 auto; padding: 40px 30px 90px; }
     .view { animation: view-in 280ms ease both; }
@@ -560,9 +608,9 @@
       .brand-name { font-size: 0.9rem; }
       .main-nav { gap: 0; }
       .nav-button { padding: 8px 10px; font-size: 0.82rem; }
-      .music-button span { display: none; }
-      .music-button { width: 39px; padding: 0; }
-      .music-source select { width: 132px; font-size: 0.74rem; }
+      .music-button #music-label { display: none; }
+      .music-button { width: 33px; padding: 0; }
+      .music-source select { width: 120px; font-size: 0.72rem; }
       .chapter-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .home-hero { grid-template-columns: 1.35fr 0.65fr; gap: 22px; }
       .achievement-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -592,8 +640,10 @@
       .brand-name { font-size: 0.78rem; letter-spacing: 0.8px; }
       .header-actions { gap: 6px; }
       .xp-pill { min-width: 76px; padding: 7px 9px; font-size: 0.76rem; }
-      .icon-button, .music-button { width: 35px; height: 35px; }
-      .music-source select { width: 112px; height: 35px; padding-left: 9px; font-size: 0.7rem; }
+      .icon-button { width: 35px; height: 35px; }
+      .music-player { padding: 3px; }
+      .music-button { width: 31px; height: 31px; }
+      .music-source select { width: 100px; height: 29px; font-size: 0.68rem; }
       .volume-control { display: none !important; }
       .nav-button { font-size: 0.77rem; padding: 7px 9px; }
       .nav-button .icon { width: 15px; height: 15px; }
@@ -641,7 +691,8 @@
     @media (max-width: 560px) {
       :root { --topbar-height: 156px; }
       .header-actions { max-width: 180px; flex-wrap: wrap; justify-content: flex-end; }
-      .music-source { order: 4; width: 100%; }
+      .music-player { order: 4; width: 100%; }
+      .music-source { flex: 1; min-width: 0; }
       .music-source select { width: 100%; }
     }
     @media (max-width: 440px) {
@@ -713,22 +764,25 @@
       </nav>
       <div class="header-actions">
         <div class="xp-pill" title="Điểm kinh nghiệm tích lũy"><svg class="icon"><use href="#i-spark"/></svg><span id="hud-exp">0 EXP</span></div>
-        <label class="music-source" title="Chọn nhạc nền; cả hai bản đều là tệp cục bộ">
-          <span class="sr-only">Chọn nhạc nền</span>
-          <select id="music-source" aria-label="Chọn nhạc nền">
-            <option value="local">Nhạc phù thủy chill</option>
-            <option value="youtube">Harry Potter · MP4</option>
-          </select>
-        </label>
-        <button class="music-button" id="music-button" data-action="music" aria-pressed="false" aria-label="Phát nhạc phù thủy chill không lời" title="Phát Ways of the Wizard — Geoff Harvey"><svg class="icon"><use href="#i-music"/></svg><span id="music-label">Nhạc</span></button>
-        <div class="volume-control" id="volume-control"><svg class="icon"><use href="#i-volume"/></svg><input id="music-volume" type="range" min="0" max="100" value="28" aria-label="Âm lượng nhạc"></div>
+        <div class="music-player">
+          <label class="music-source" title="Chọn nhạc nền; cả hai bản đều là tệp cục bộ">
+            <svg class="icon" aria-hidden="true"><use href="#i-music"/></svg>
+            <span class="sr-only">Chọn nhạc nền</span>
+            <select id="music-source" aria-label="Chọn nhạc nền">
+              <option value="local">Phù thủy chill</option>
+              <option value="youtube">Harry Potter</option>
+            </select>
+          </label>
+          <button class="music-button" id="music-button" data-action="music" aria-pressed="false" aria-label="Phát nhạc phù thủy chill không lời" title="Phát Ways of the Wizard — Geoff Harvey"><span class="music-button-icon"><svg class="icon" aria-hidden="true"><use href="#i-music"/></svg><span class="music-status-dot"></span></span><span id="music-label">Nhạc</span></button>
+          <div class="volume-control" id="volume-control"><svg class="icon" aria-hidden="true"><use href="#i-volume"/></svg><input id="music-volume" type="range" min="0" max="100" value="28" aria-label="Âm lượng nhạc"></div>
+        </div>
         <button class="icon-button" id="focus-button" data-action="focus" aria-pressed="false" title="Bật chế độ tập trung"><svg class="icon"><use href="#i-focus"/></svg><span class="sr-only">Chế độ tập trung</span></button>
       </div>
     </div>
   </header>
 
-  <audio id="bg-music" src="assets/hogwarts-chill.mp3" preload="none" loop aria-hidden="true"></audio>
-  <video id="harry-potter-music" src="assets/hogwarts-prologue.mp4" preload="none" loop playsinline aria-hidden="true"></video>
+  <audio id="bg-music" src="assets/hogwarts-chill.mp3" preload="auto" loop aria-hidden="true"></audio>
+  <audio id="harry-potter-music" src="assets/hogwarts-prologue.wav" preload="auto" loop aria-hidden="true"></audio>
 
   <main id="app">
     <section class="view" id="view-home" aria-labelledby="home-title">
@@ -1636,7 +1690,7 @@
 
     const musicTracks = {
       local: { label: 'nhạc phù thủy chill', title: 'Ways of the Wizard — Geoff Harvey' },
-      youtube: { label: 'nhạc Harry Potter — Prologue', title: 'Prologue — John Williams · MP4 cục bộ' }
+      youtube: { label: 'nhạc Harry Potter — Prologue', title: 'Prologue — John Williams' }
     };
 
     const MusicPlayer = {
@@ -1652,7 +1706,12 @@
         this.audio.volume = this.volume;
         this.movie.volume = this.volume;
         this.audio.addEventListener('error', () => showToast('Không tải được tệp nhạc. Hãy kiểm tra assets/hogwarts-chill.mp3.'));
-        this.movie.addEventListener('error', () => showToast('Không tải được nhạc Harry Potter. Hãy kiểm tra assets/hogwarts-prologue.mp4.'));
+        this.movie.addEventListener('error', () => showToast('Không tải được nhạc Harry Potter. Hãy kiểm tra assets/hogwarts-prologue.wav.'));
+        [this.audio, this.movie].forEach((media) => {
+          ['play', 'playing', 'pause', 'ended'].forEach((eventName) => {
+            media.addEventListener(eventName, () => this.syncControls());
+          });
+        });
         document.getElementById('music-source').value = this.source;
       },
       currentMedia() {
@@ -1690,7 +1749,7 @@
           showToast(error.name === 'NotAllowedError'
             ? 'Trình duyệt chưa cho phát nhạc. Hãy bấm lại nút Nhạc.'
             : this.source === 'youtube'
-              ? 'Không phát được nhạc Harry Potter. Hãy kiểm tra assets/hogwarts-prologue.mp4.'
+              ? 'Không phát được nhạc Harry Potter. Hãy kiểm tra assets/hogwarts-prologue.wav.'
               : 'Không phát được nhạc. Hãy kiểm tra assets/hogwarts-chill.mp3.');
         } finally {
           this.toggling = false;
